@@ -1,16 +1,21 @@
 import GameBoard from '../src/gameboard';
+import Ship from '../src/ship';
 
-describe('GameBoard constructor', () => {
+describe('GameBoard instantiation', () => {
 
-  test('creates a gameboard object with a ships property', () => {
-    const board = new GameBoard();
-
-    expect(board.ships).toBeDefined();
+  test('raises an error when no arguments are supplied', () => {
+    expect(() => GameBoard()).toThrow('a ship factory must be supplied as an argument');
   });
-      
-  test('create a gameboard object with a misses property', () => {
-    const board = new GameBoard();
 
-    expect(board.misses).toBeDefined();
+  test('raises an error when supplied argument is not a valid ship factory object', () => {
+    expect(() => GameBoard({})).toThrow('a ship factory must be supplied as an argument');
   });
+  
+  test('does not raise an error when supplied argument is a valid ship factory object', () => {
+    const shipFactory = Ship;
+
+    expect(() => GameBoard(shipFactory)).not.toThrow();
+  });
+
+  
 });
