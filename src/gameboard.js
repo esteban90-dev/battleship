@@ -11,10 +11,16 @@ const GameBoard = function(ShipFactory) {
   const gridLength = 10;
   const gridHeight = 10;
   const ships = [];
+  const misses = [];
+  const attacks = [];
   const shipFactory = ShipFactory;
 
   function getShips() {
     return ships;
+  }
+
+  function getMisses() {
+    return misses;
   }
 
   function placeShip(startCoordinate, shipLength, direction) {
@@ -59,6 +65,55 @@ const GameBoard = function(ShipFactory) {
     });
   }
 
+  function hasBeenAttacked(coordinate) {
+    // returns true if the coordinate exists in the attacks array
+    let result = false;
+
+    attacks.forEach((attackCoordinate) => {
+      if (attackCoordinate[0] === coordinate[0] && attackCoordinate[1] === coordinate[1]) {
+        result = true;
+      }
+    });
+
+    return result;
+  }
+
+  function receiveAttack(attackCoordinate) {
+    // if there is a ship at the supplied coordinate, register a 'hit'
+    let attackedShip;
+    let attackedShipSection;
+
+    // throw an error if the attackCoordinate is not on the board or if the position has already been attacked
+    if (!isValidCoordinate(attackCoordinate) || hasBeenAttacked(attackCoordinate)) {
+      throw('invalid attack coordinate');
+    }
+
+    // record the attack location
+    attacks.push(attackCoordinate.slice(0));
+
+    // loop through all the ships and see if any ship coordinates match the attack coordinate
+    // if a coordinate match is found, record the ship and which section of the ship got hit
+    ships.forEach((shipEntry) => {
+      let shipSection = 0;
+
+      shipEntry.coordinates.forEach((coordinate) => {
+        if (attackCoordinate[0] === coordinate[0] && attackCoordinate[1] === coordinate[1]) {
+          attackedShip = shipEntry.ship;
+          attackedShipSection = shipSection;
+        }
+        shipSection += 1;
+      });
+    });
+
+    // if the attack hit a ship, call the ship.hit() method to record the damage
+    // if the attack didn't hit a ship, record the attack as a miss
+    if (attackedShip) {
+      attackedShip.hit(attackedShipSection);
+    } else {
+      misses.push(attackCoordinate.slice(0));
+    }
+  }
+
   function isCoordinateAvailable(coordinate) {
     // returns true if the coordinate is not already occupied by a ship
     const occupiedCoordinates = [];
@@ -99,7 +154,7 @@ const GameBoard = function(ShipFactory) {
     return false;
   }
 
-  return { getShips, placeShip }
+  return { getShips, getMisses, placeShip, receiveAttack }
 }
 
 export default GameBoard;

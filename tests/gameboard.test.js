@@ -71,3 +71,45 @@ describe('gameboard.placeShip()', () => {
   });
       
 });
+
+describe('gameboard.receiveAttack()', () => {
+
+  test('if ship exists at the coordinates of the attack, ship takes damage', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([5, 5], 5, 0);
+    board.receiveAttack([5, 5]);
+
+    expect(board.getShips()[0].ship.getDamage()).toEqual([1, 0, 0, 0, 0]);
+  });
+
+  test('if ship does not exist at the coordinates of the attack, record the attack as a miss', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([5, 5], 5, 0);
+    board.receiveAttack([5, 8]);
+
+    expect(board.getShips()[0].ship.getDamage()).toEqual([0, 0, 0, 0, 0]);
+    expect(board.getMisses()[0]).toEqual([5, 8]);
+  });
+
+  test('if the attack coordinate is not on the board, throw an error', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    expect(() => board.receiveAttack([11, 11])).toThrow('invalid attack coordinate');
+  });
+
+  test('if the coordinate has already been attacked, throw an error', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 10], 5, 0);
+    board.receiveAttack([0, 10]);
+
+    expect(() => board.receiveAttack([0, 10])).toThrow('invalid attack coordinate');
+  });
+
+});
