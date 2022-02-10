@@ -17,5 +17,57 @@ describe('GameBoard instantiation', () => {
     expect(() => GameBoard(shipFactory)).not.toThrow();
   });
 
-  
+});
+
+describe('gameboard.placeShip()', () => {
+
+  test('creates a new ship entry when placing a ship in the +x direction', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 5, 0);
+
+    expect(board.getShips()[0].coordinates).toEqual([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+
+    // verify ship entry has a valid ship object
+    expect(board.getShips()[0].ship.hit).toBeDefined();
+    expect(board.getShips()[0].ship.isSunk).toBeDefined();
+  });
+
+  test('creates a new ship entry when placing a ship in the +y direction', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 5, 1);
+
+    expect(board.getShips()[0].coordinates).toEqual([[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+
+    // verify ship entry has a valid ship object
+    expect(board.getShips()[0].ship.hit).toBeDefined();
+    expect(board.getShips()[0].ship.isSunk).toBeDefined();
+  });
+
+  test('raises an error when some or all ship coordinates do not exist on the board', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    expect(() => board.placeShip([-1, -1], 5, 0)).toThrow('invalid ship position');
+  });
+
+  test('raises an error when some or all ship coordinates overlap with an existing ship', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 5, 0);
+
+    expect(() => board.placeShip([0, 0], 5, 1)).toThrow('invalid ship position');
+  });
+
+  test('raises an error if the direction argument is not a 1 or 0', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    expect(() => board.placeShip([0, 0], 5, 3)).toThrow('invalid ship direction');
+  });
+      
 });
