@@ -113,3 +113,40 @@ describe('gameboard.receiveAttack()', () => {
   });
 
 });
+
+describe('gameboard.allSunk()', () => {
+
+  test('returns true if all ships have been sunk', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 1);
+    board.receiveAttack([0, 0]);
+    board.receiveAttack([0, 1]);
+    board.receiveAttack([0, 2]);
+
+    board.placeShip([10, 0], 3, 1);
+    board.receiveAttack([10, 0]);
+    board.receiveAttack([10, 1]);
+    board.receiveAttack([10, 2]);
+
+    expect(board.allSunk()).toBe(true);
+  });
+
+  test('returns false if some ships have not been sunk', () => {
+    const shipFactory = Ship;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 1);
+    board.receiveAttack([0, 0]);
+    board.receiveAttack([0, 1]);
+    board.receiveAttack([0, 2]);
+
+    board.placeShip([10, 0], 3, 1);
+    board.receiveAttack([10, 0]);
+    board.receiveAttack([10, 2]);
+
+    expect(board.allSunk()).toBe(false);
+  });
+
+});

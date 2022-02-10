@@ -28,7 +28,7 @@ const GameBoard = function(ShipFactory) {
     let currentCoordinate;
     let i = 0;
 
-    currentCoordinate = startCoordinate
+    currentCoordinate = startCoordinate;
 
     // throw an error if the direction argument is incorrect
     if (direction !== 0 && direction !== 1) {
@@ -134,6 +134,26 @@ const GameBoard = function(ShipFactory) {
     return result;
   }
 
+  function allSunk() {
+    // return true if ship.isSunk() returns true for each ship
+    let result = [];
+
+    ships.forEach((shipEntry) => {
+      let ship = shipEntry.ship;
+
+      if (ship.isSunk()) {
+        result.push(true);
+      } else {
+        result.push(false);
+      }
+    });
+
+    if (result.every((item) => item === true)) {
+      return true;
+    }
+    return false;
+  }
+
   function isValidCoordinate(coordinate) {
     // returns true if coordinate exists on the board
     let validXCoordinate;
@@ -154,7 +174,7 @@ const GameBoard = function(ShipFactory) {
     return false;
   }
 
-  return { getShips, getMisses, placeShip, receiveAttack }
+  return { getShips, getMisses, placeShip, receiveAttack, allSunk }
 }
 
 export default GameBoard;
