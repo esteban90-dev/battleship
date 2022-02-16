@@ -154,6 +154,10 @@ const GameBoard = function(ShipFactory) {
     return false;
   }
 
+  function getAttacks() {
+    return attacks;
+  }
+
   function isValidCoordinate(coordinate) {
     // returns true if coordinate exists on the board
     let validXCoordinate;
@@ -174,7 +178,7 @@ const GameBoard = function(ShipFactory) {
     return false;
   }
 
-  return { getShips, getMisses, placeShip, receiveAttack, allSunk }
+  return { getShips, getMisses, getAttacks, placeShip, receiveAttack, allSunk }
 }
 
 export default GameBoard;

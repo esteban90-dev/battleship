@@ -5,7 +5,7 @@ const mockShipFactoryUnSunk = (length) => {
   return {
     getDamage: () => {},
     isSunk: () => { return false },
-    hit: jest.fn((location) => {})  
+    hit: jest.fn((location) => {})
   }
 }
 
@@ -14,7 +14,7 @@ const mockShipFactorySunk = (length) => {
   return {
     getDamage: () => {},
     isSunk: () => { return true },
-    hit: jest.fn((location) => {})  
+    hit: jest.fn((location) => {})
   }
 }
 
@@ -151,6 +151,21 @@ describe('gameboard.allSunk()', () => {
     board.placeShip([10, 0], 3, 1);
 
     expect(board.allSunk()).toBe(true);
+  });
+
+});
+
+describe('gameboard.getAttacks()', () => {
+
+  test('it returns an array of coordinates that represent attacks on the board', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 1);
+    board.receiveAttack([0, 0]);
+    board.receiveAttack([5, 5]);
+
+    expect(board.getAttacks()).toEqual([[0, 0], [5, 5]]);
   });
 
 });
