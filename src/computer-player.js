@@ -51,7 +51,11 @@ const ComputerPlayer = function(gameboard) {
     return parseInt(Math.random() * endNumber) + startNumber;
   }
 
-  return { attack }
+  function getBoard() {
+    return board;
+  }
+
+  return { attack, getBoard }
 }
 
 export default ComputerPlayer;

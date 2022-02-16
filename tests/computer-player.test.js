@@ -43,6 +43,17 @@ describe('ComputerPlayer instantiation', () => {
 
 });
 
+describe('ComputerPlayer.getBoard()', () => {
+
+  test('returns the board object', () => {
+    const board = mockBoard;
+    const computerPlayer = ComputerPlayer(board);
+
+    expect(computerPlayer.getBoard()).toBe(board);
+  });
+
+});
+
 describe('ComputerPlayer.attack()', () => {
 
   test('returns a random coordinate on the board that has not been attacked yet', () => {
