@@ -169,3 +169,14 @@ describe('gameboard.getAttacks()', () => {
   });
 
 });
+
+describe('gameboard.getSize()', () => {
+
+  test('it returns an array that represents the length and height of the board', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(board.getSize()).toEqual([10, 10]);
+  });
+
+});

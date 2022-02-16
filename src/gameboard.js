@@ -158,6 +158,10 @@ const GameBoard = function(ShipFactory) {
     return attacks;
   }
 
+  function getSize() {
+    return [gridLength, gridHeight];
+  }
+
   function isValidCoordinate(coordinate) {
     // returns true if coordinate exists on the board
     let validXCoordinate;
@@ -178,7 +182,7 @@ const GameBoard = function(ShipFactory) {
     return false;
   }
 
-  return { getShips, getMisses, getAttacks, placeShip, receiveAttack, allSunk }
+  return { getShips, getMisses, getAttacks, getSize, placeShip, receiveAttack, allSunk }
 }
 
 export default GameBoard;
