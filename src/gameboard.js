@@ -36,7 +36,7 @@ const GameBoard = function(ShipFactory) {
       throw('invalid ship direction');
     }
 
-    // if direction is 0, determine remaining coordinates in the +x direction
+    // if direction is 0, determine remaining coordinates in the +y direction
     if (direction === 0) {
       while (i < shipLength) {
         coordinates.push(currentCoordinate.slice(0));
@@ -45,7 +45,7 @@ const GameBoard = function(ShipFactory) {
       }
     }
 
-    // if direction is 1, determine remaining coordinates in the +y direction
+    // if direction is 1, determine remaining coordinates in the +x direction
     if (direction === 1) {
       while (i < shipLength) {
         coordinates.push(currentCoordinate.slice(0));
@@ -175,14 +175,14 @@ const GameBoard = function(ShipFactory) {
     let validYCoordinate;
 
     if(coordinate[0] >= 0 && coordinate[0] <= gridLength) {
-      validXCoordinate = true;
-    }
-
-    if(coordinate[1] >= 0 && coordinate[1] <= gridHeight) {
       validYCoordinate = true;
     }
 
-    if (validXCoordinate && validYCoordinate) {
+    if(coordinate[1] >= 0 && coordinate[1] <= gridHeight) {
+      validXCoordinate = true;
+    }
+
+    if (validYCoordinate && validXCoordinate) {
       return true;
     }
 
@@ -198,15 +198,15 @@ const GameBoard = function(ShipFactory) {
     printedBoard = printedBoard.map(element => Array(gridHeight).fill(''));
     
     attacks.forEach(attackCoordinate => {
-      let x = attackCoordinate[0];
-      let y = attackCoordinate[1];
-      printedBoard[x][y] = 'x';
+      let y = attackCoordinate[0];
+      let x = attackCoordinate[1];
+      printedBoard[y][x] = 'x';
     });
 
     misses.forEach(missCoordinate => {
-      let x = missCoordinate[0];
-      let y = missCoordinate[1];
-      printedBoard[x][y] = 'o';
+      let y = missCoordinate[0];
+      let x = missCoordinate[1];
+      printedBoard[y][x] = 'o';
     });
 
     return printedBoard;

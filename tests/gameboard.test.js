@@ -38,7 +38,7 @@ describe('GameBoard instantiation', () => {
 
 describe('gameboard.placeShip()', () => {
 
-  test('creates a new ship entry when placing a ship in the +x direction', () => {
+  test('creates a new ship entry when placing a ship in the +y direction', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
@@ -51,7 +51,7 @@ describe('gameboard.placeShip()', () => {
     expect(board.getShips()[0].ship.isSunk).toBeDefined();
   });
 
-  test('creates a new ship entry when placing a ship in the +y direction', () => {
+  test('creates a new ship entry when placing a ship in the +x direction', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
