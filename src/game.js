@@ -23,6 +23,10 @@ const Game = function(humanPlayer, computerPlayer) {
   function initialize() {
     const response = {};
 
+    // clear both boards
+    computerBoard.clear();
+    humanBoard.clear();
+
     // place ships on the computer player's board
     computerBoard.placeShip([0, 0], 5, 0);
     computerBoard.placeShip([0, 9], 4, 0);

@@ -44,6 +44,47 @@ describe('Game instantiation', () => {
 
 });
 
+describe('game.initialize()', () => {
+
+  const humanBoard = {
+    placeShip: () => {},
+    getShips: () => [],
+    clear: jest.fn(() => {}),
+  }
+
+  const computerBoard = {
+    placeShip: () => {},
+    getShips: () => [],
+    clear: jest.fn(() => {}),
+  }
+
+  const fakeHumanPlayer = {
+    getBoard: () => humanBoard,
+  };
+
+  const fakeComputerPlayer = {
+    getBoard: () => computerBoard,
+    attack: () => {},
+  };
+
+  test('it clears the computer board', () => {
+    const game = Game(fakeHumanPlayer, fakeComputerPlayer);
+
+    game.initialize();
+
+    expect(computerBoard.clear).toHaveBeenCalled();
+  });
+
+  test('it clears the human board', () => {
+    const game = Game(fakeHumanPlayer, fakeComputerPlayer);
+
+    game.initialize();
+
+    expect(humanBoard.clear).toHaveBeenCalled();
+  });
+
+});
+
 describe('game.turn()', () => {
 
   const losingBoard = {
