@@ -1,14 +1,5 @@
 import Game from '../src/game';
 
-const fakeBoard = {
-  placeShip: () => {},
-}
-
-const fakeComputerPlayer = {
-  board: fakeBoard,
-  getBoard: () => board,
-}
-
 describe('Game instantiation', () => {
 
   test('throws an error if no arguments are supplied', () => {
