@@ -8,13 +8,13 @@ const GameBoard = function(ShipFactory) {
     throw('a ship factory must be supplied as an argument');
   }
 
+  const shipFactory = ShipFactory;
   const gridLength = 10;
   const gridHeight = 10;
-  const ships = [];
-  const misses = [];
-  const attacks = [];
-  const hits = [];
-  const shipFactory = ShipFactory;
+  let ships = [];
+  let misses = [];
+  let attacks = [];
+  let hits = [];
 
   function getShips() {
     return ships;
@@ -212,7 +212,14 @@ const GameBoard = function(ShipFactory) {
     return printedBoard;
   }
 
-  return { getShips, getMisses, getAttacks, getHits, getSize, placeShip, receiveAttack, allSunk, print }
+  function clear() {
+    ships = [];
+    misses = [];
+    hits = [];
+    attacks = [];
+  }
+
+  return { getShips, getMisses, getAttacks, getHits, getSize, placeShip, receiveAttack, allSunk, print, clear }
 }
 
 export default GameBoard;

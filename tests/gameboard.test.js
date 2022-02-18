@@ -222,3 +222,50 @@ describe('gameboard.print()', () => {
   });
 
 });
+
+describe('gameboard.clear()', () => {
+
+  test('it clears the ships array', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 0);
+    board.clear();
+
+    expect(board.getShips()).toEqual([]);
+  });
+
+  test('it clears the misses array', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 0);
+    board.receiveAttack([5, 5]);
+    board.clear();
+
+    expect(board.getMisses()).toEqual([]);
+  });
+
+  test('it clears the hits array', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 0);
+    board.receiveAttack([0, 0]);
+    board.clear();
+
+    expect(board.getHits()).toEqual([]);
+  });
+
+  test('it clears the attacks array', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 0);
+    board.receiveAttack([0, 0]);
+    board.clear();
+
+    expect(board.getAttacks()).toEqual([]);
+  });
+
+});
