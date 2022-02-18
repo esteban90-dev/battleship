@@ -13,6 +13,7 @@ const GameBoard = function(ShipFactory) {
   const ships = [];
   const misses = [];
   const attacks = [];
+  const hits = [];
   const shipFactory = ShipFactory;
 
   function getShips() {
@@ -93,6 +94,7 @@ const GameBoard = function(ShipFactory) {
 
     // loop through all the ships and see if any ship coordinates match the attack coordinate
     // if a coordinate match is found, record the ship and which section of the ship got hit
+    // and add the coordinate to the hits array
     ships.forEach((shipEntry) => {
       let shipSection = 0;
 
@@ -100,6 +102,7 @@ const GameBoard = function(ShipFactory) {
         if (attackCoordinate[0] === coordinate[0] && attackCoordinate[1] === coordinate[1]) {
           attackedShip = shipEntry.ship;
           attackedShipSection = shipSection;
+          hits.push(attackCoordinate.slice(0));
         }
         shipSection += 1;
       });
@@ -162,6 +165,10 @@ const GameBoard = function(ShipFactory) {
     return [gridLength, gridHeight];
   }
 
+  function getHits() {
+    return hits;
+  }
+
   function isValidCoordinate(coordinate) {
     // returns true if coordinate exists on the board
     let validXCoordinate;
@@ -182,7 +189,30 @@ const GameBoard = function(ShipFactory) {
     return false;
   }
 
-  return { getShips, getMisses, getAttacks, getSize, placeShip, receiveAttack, allSunk }
+  function print() {
+    // return a matrix of characters representing the board
+    // '' is an unattacked position
+    // 'x' is an attacked position that scored a hit
+    // 'o' is an attacked position that was a miss
+    let printedBoard = Array(gridLength).fill([]);
+    printedBoard = printedBoard.map(element => Array(gridHeight).fill(''));
+    
+    attacks.forEach(attackCoordinate => {
+      let x = attackCoordinate[0];
+      let y = attackCoordinate[1];
+      printedBoard[x][y] = 'x';
+    });
+
+    misses.forEach(missCoordinate => {
+      let x = missCoordinate[0];
+      let y = missCoordinate[1];
+      printedBoard[x][y] = 'o';
+    });
+
+    return printedBoard;
+  }
+
+  return { getShips, getMisses, getAttacks, getHits, getSize, placeShip, receiveAttack, allSunk, print }
 }
 
 export default GameBoard;

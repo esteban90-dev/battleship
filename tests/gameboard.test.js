@@ -157,7 +157,7 @@ describe('gameboard.allSunk()', () => {
 
 describe('gameboard.getAttacks()', () => {
 
-  test('it returns an array of coordinates that represent attacks on the board', () => {
+  test('it returns an array of coordinates that represents attacks on the board', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
@@ -177,6 +177,48 @@ describe('gameboard.getSize()', () => {
     const board = GameBoard(shipFactory);
 
     expect(board.getSize()).toEqual([10, 10]);
+  });
+
+});
+
+describe('gameboard.getHits()', () => {
+
+  test('it returns an array of coordinates that represents hits on the board', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 1);
+    board.receiveAttack([0, 0]);
+    board.receiveAttack([5, 5]);
+
+    expect(board.getHits()).toEqual([[0, 0]]);
+  });
+
+});
+
+describe('gameboard.print()', () => {
+
+  test('it returns a character representation of the board that shows hits with an x and misses with an o', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+    const expected = [
+      ['x', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', 'o', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+    ];
+
+    board.placeShip([0, 0], 3, 1);
+    board.receiveAttack([0, 0]);
+    board.receiveAttack([5, 1]);
+
+    expect(board.print()).toEqual(expected);
   });
 
 });
