@@ -43,3 +43,76 @@ describe('Game instantiation', () => {
   });
 
 });
+
+describe('game.turn()', () => {
+
+  const losingBoard = {
+    allSunk: () => true,
+    receiveAttack: () => {},
+    print: () => {},
+  }
+
+  const notLosingBoard = {
+    allSunk: () => false,
+    receiveAttack: () => {},
+    print: () => {},
+  }
+
+  describe('no winner yet', () => {
+
+    test('the winner property in the reponse object shows null', () => {
+      const fakeHumanPlayer = {
+        getBoard: () => notLosingBoard,
+      };
+    
+      const fakeComputerPlayer = {
+        getBoard: () => notLosingBoard,
+        attack: () => {},
+      };
+
+      const game = Game(fakeHumanPlayer, fakeComputerPlayer);
+
+      expect(game.turn([0, 0]).winner).toBeNull();
+    });
+
+  });
+
+  describe('the human wins', () => {
+
+    test('the winner property in the reponse object shows human', () => {
+      const fakeHumanPlayer = {
+        getBoard: () => notLosingBoard,
+      };
+    
+      const fakeComputerPlayer = {
+        getBoard: () => losingBoard,
+        attack: () => {},
+      };
+
+      const game = Game(fakeHumanPlayer, fakeComputerPlayer);
+
+      expect(game.turn([0, 0]).winner).toMatch('human');
+    });
+    
+  });
+
+  describe('the computer wins', () => {
+
+    test('the winner property in the reponse object shows computer', () => {
+      const fakeHumanPlayer = {
+        getBoard: () => losingBoard,
+      };
+    
+      const fakeComputerPlayer = {
+        getBoard: () => notLosingBoard,
+        attack: () => {},
+      };
+
+      const game = Game(fakeHumanPlayer, fakeComputerPlayer);
+
+      expect(game.turn([0, 0]).winner).toMatch('computer');
+    });
+
+  });
+
+});

@@ -21,6 +21,8 @@ const Game = function(humanPlayer, computerPlayer) {
   const humanBoard = human.getBoard();
 
   function initialize() {
+    const response = {};
+
     // place ships on the computer player's board
     computerBoard.placeShip([0, 0], 5, 0);
     computerBoard.placeShip([0, 9], 4, 0);
@@ -34,14 +36,38 @@ const Game = function(humanPlayer, computerPlayer) {
     humanBoard.placeShip([0, 9], 3, 0);
     humanBoard.placeShip([7, 7], 3, 0);
     humanBoard.placeShip([9, 5], 2, 1);
+
+    // build the response object
+    response.humanShipCoordinates = humanBoard.getShips().map(element => element.coordinates);
+    response.computerShipCoordinates = computerBoard.getShips().map(element => element.coordinates);
+
+    return response;
   }
 
   function turn(humanAttackCoordinates) {
+    const response = {};
+
     // send the human's attack to the computer's board
     computerBoard.receiveAttack(humanAttackCoordinates);
 
     // send the computer's attack to the human's board
     humanBoard.receiveAttack(computer.attack());
+
+    // build the response object
+    response.humanBoard = humanBoard.print();
+    response.computerBoard = computerBoard.print();
+
+    if (humanBoard.allSunk()) {
+      response.winner = 'computer';
+    }
+    else if (computerBoard.allSunk()) {
+      response.winner = 'human';
+    }
+    else {
+      response.winner = null;
+    }
+
+    return response;
   }
 
   return { initialize, turn }
