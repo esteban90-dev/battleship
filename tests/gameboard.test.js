@@ -123,10 +123,10 @@ describe('gameboard.receiveAttack()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 10], 5, 0);
-    board.receiveAttack([0, 10]);
+    board.placeShip([0, 9], 5, 0);
+    board.receiveAttack([0, 9]);
 
-    expect(() => board.receiveAttack([0, 10])).toThrow('invalid attack coordinate');
+    expect(() => board.receiveAttack([0, 9])).toThrow('invalid attack coordinate');
   });
 
 });
@@ -138,7 +138,7 @@ describe('gameboard.allSunk()', () => {
     const board = GameBoard(shipFactory);
 
     board.placeShip([0, 0], 3, 1);
-    board.placeShip([10, 0], 3, 1);
+    board.placeShip([9, 0], 3, 1);
 
     expect(board.allSunk()).toBe(false);
   });
@@ -148,7 +148,7 @@ describe('gameboard.allSunk()', () => {
     const board = GameBoard(shipFactory);
 
     board.placeShip([0, 0], 3, 1);
-    board.placeShip([10, 0], 3, 1);
+    board.placeShip([9, 0], 3, 1);
 
     expect(board.allSunk()).toBe(true);
   });

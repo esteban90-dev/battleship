@@ -174,11 +174,11 @@ const GameBoard = function(ShipFactory) {
     let validXCoordinate;
     let validYCoordinate;
 
-    if(coordinate[0] >= 0 && coordinate[0] <= gridLength) {
+    if(coordinate[0] >= 0 && coordinate[0] <= gridLength - 1) {
       validYCoordinate = true;
     }
 
-    if(coordinate[1] >= 0 && coordinate[1] <= gridHeight) {
+    if(coordinate[1] >= 0 && coordinate[1] <= gridHeight - 1) {
       validXCoordinate = true;
     }
 
@@ -196,6 +196,8 @@ const GameBoard = function(ShipFactory) {
     // 'o' is an attacked position that was a miss
     let printedBoard = Array(gridLength).fill([]);
     printedBoard = printedBoard.map(element => Array(gridHeight).fill(''));
+
+    console.log("attacks: " + attacks);
     
     attacks.forEach(attackCoordinate => {
       let y = attackCoordinate[0];
