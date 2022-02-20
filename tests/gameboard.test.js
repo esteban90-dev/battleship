@@ -221,6 +221,29 @@ describe('gameboard.print()', () => {
     expect(board.print()).toEqual(expected);
   });
 
+  test('it returns a character representation of the board that shows each section of a sunk ship as an X', () => {
+    const shipFactory = mockShipFactorySunk;
+    const board = GameBoard(shipFactory);
+    const expected = [
+      ['X', 'X', 'X', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['X', '', '', '', '', '', '', '', '', ''],
+      ['X', '', '', '', '', '', '', '', '', ''],
+      ['X', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', ''],
+    ];
+
+    // place pre-sunken ships
+    board.placeShip([0, 0], 3, 1);
+    board.placeShip([3, 0], 3, 0);
+
+    expect(board.print()).toEqual(expected);
+  });
+
 });
 
 describe('gameboard.clear()', () => {

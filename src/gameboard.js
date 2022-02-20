@@ -194,19 +194,31 @@ const GameBoard = function(ShipFactory) {
     // '' is an unattacked position
     // 'x' is an attacked position that scored a hit
     // 'o' is an attacked position that was a miss
+    // sunk ships have an 'X' for each ship section
     let printedBoard = Array(gridLength).fill([]);
     printedBoard = printedBoard.map(element => Array(gridHeight).fill(''));
     
+    // draw hits
     attacks.forEach(attackCoordinate => {
       let y = attackCoordinate[0];
       let x = attackCoordinate[1];
       printedBoard[y][x] = 'x';
     });
 
+    // draw misses
     misses.forEach(missCoordinate => {
       let y = missCoordinate[0];
       let x = missCoordinate[1];
       printedBoard[y][x] = 'o';
+    });
+
+    // draw sunken ships
+    ships.forEach(shipEntry => {
+      if (shipEntry.ship.isSunk()) {
+        shipEntry.coordinates.forEach((coordinate) => {
+          printedBoard[coordinate[0]][coordinate[1]] = 'X';
+        });
+      }
     });
 
     return printedBoard;
