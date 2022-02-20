@@ -3,6 +3,8 @@ import GameBoard from '../src/gameboard';
 import Game from '../src/game';
 import ComputerPlayer from '../src/computer-player';
 import HumanPlayer from '../src/human-player';
+import Display from '../src/display.js';
+import DisplayController from '../src/display-controller.js';
 
 let shipFactory;
 let computerBoard;
@@ -10,6 +12,8 @@ let computerPlayer;
 let humanBoard;
 let humanPlayer;
 let game;
+let display;
+let displayController;
 
 beforeEach(() => {
   shipFactory = Ship;
@@ -18,42 +22,59 @@ beforeEach(() => {
   humanBoard = GameBoard(shipFactory);
   humanPlayer = HumanPlayer(humanBoard);
   game = Game(humanPlayer, computerPlayer);
+  display = Display;
+  display.render = jest.fn(() => {});  // mock display.render
+  displayController = DisplayController(game, display);
 });
 
-describe('game.initialize()', () => {
+describe('game starts', () => {
 
-  test('a reponse object is returned that shows the humans ship positions', () => {
-    const expected = [
-      [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4]],
-      [[5, 0], [5, 1], [5, 2], [5, 3]],
-      [[0, 9], [1, 9], [2, 9]],
-      [[7, 7], [8, 7], [9, 7]],
-      [[9, 5], [9, 6]],
-    ];
+  test('display.render() is called with an object that shows the human and computer ship positions', () => {
+    const expected = {
+      humanShipCoordinates: [
+        [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4]],
+        [[5, 0], [5, 1], [5, 2], [5, 3]],
+        [[0, 9], [1, 9], [2, 9]],
+        [[7, 7], [8, 7], [9, 7]],
+        [[9, 5], [9, 6]]
+      ],
+      computerShipCoordinates: [
+        [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]],
+        [[0, 9], [1, 9], [2, 9], [3, 9]],
+        [[2, 2], [2, 3], [2, 4]],
+        [[8, 7], [8, 8], [8, 9]],
+        [[9, 5], [9, 6]]
+      ],
+    };
 
-    expect(game.initialize().humanShipCoordinates).toEqual(expected);
-  });
+    displayController.handleStart();
 
-  test('a reponse object is returned that shows the computers ship positions', () => {
-    const expected = [
-      [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]],
-      [[0, 9], [1, 9], [2, 9], [3, 9]],
-      [[2, 2], [2, 3], [2, 4]],
-      [[8, 7], [8, 8], [8, 9]],
-      [[9, 5], [9, 6]],
-    ];
-
-    expect(game.initialize().computerShipCoordinates).toEqual(expected);
+    expect(display.render).toHaveBeenCalledWith(expected);
   });
 
 });
 
-describe('game.turn()', () => {
+describe('human makes an attack on computer and computer reponds with attack on human', () => {
 
-  describe('human makes an attack on the computers board', () => {
+  test('display.render() is called with an object that shows the printed human board, the printed computer board, and the winner status', () => {
+    // stub out computerPlayer.attack() since this normally responds with random coordinates
+    computerPlayer.attack = () => [5, 5];
 
-    test('a reponse object is returned that shows the computers board following the attack', () => {
-      const expected = [
+    const expected = {
+      humanBoard: [
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', 'o', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+      ],
+      computerBoard: [
+        ['x', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],
@@ -63,26 +84,14 @@ describe('game.turn()', () => {
         ['', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', 'x', '', '', '', ''],
-    ];
-      game.initialize();
+      ],
+      winner: null,
+    }
 
-      expect(game.turn([9, 5]).computerBoard).toEqual(expected);
-    });
+    displayController.handleStart();
+    displayController.handleAttack([0, 0]);
 
-  });
-
-  describe('human makes an attack on the computers board, and computer responds with an attack on the humans board', () => {
-
-    test('a reponse object is returned that shows the humans board following the attack', () => {
-      game.initialize();
-      
-      // we don't know where the computer will attack
-      // just make sure an 'x' or an 'o' appears on the human's board
-      const wasAttacked = game.turn([9, 5]).humanBoard.some(array => array.includes('x') || array.includes('o'));
-      expect(wasAttacked).toEqual(true);
-    });
-
+    expect(display.render).toHaveBeenCalledWith(expected);
   });
 
 });
