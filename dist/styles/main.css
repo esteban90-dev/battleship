@@ -1,0 +1,25 @@
+.board-container {
+  display: flex;
+}
+
+#computerBoard {
+  margin-left: 50px;
+}
+
+.human-button {
+  height: 50px;
+  width: 50px;
+}
+
+.computer-button {
+  height: 50px;
+  width: 50px;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.ship-present {
+  background-color: red;
+}

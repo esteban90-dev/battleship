@@ -6,10 +6,9 @@ const DisplayController = function(Game, Display) {
   display.handleStart(start);
 
   function start() {
-    const response = game.turn([0, 0]);
+    const response = game.initialize();
 
-    console.log(response);
-    // display.render(response);
+    display.render(response);
   }
 
   function attack(coordinate) {

@@ -10,13 +10,17 @@
   <body>
     <header>
       <h1>Battleship</h1>
-      <input type="button" value="start game">
+      <input type="button" id="start" value="start game">
     </header>
     <main>
-      <section id="playerBoard">
-      </section>
-      <section id="computerBoard">
-      </section>
+      <div class="board-container">
+        <section id="humanBoard">
+          <h2>Human Board</h2>
+        </section>
+        <section id="computerBoard">
+          <h2>Computer Board</h2>
+        </section>
+      </div>
     </main>
     <script src="./scripts/main.js"></script>
   </body>
