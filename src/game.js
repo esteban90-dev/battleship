@@ -42,8 +42,20 @@ const Game = function(humanPlayer, computerPlayer) {
     humanBoard.placeShip([9, 5], 2, 1);
 
     // build the response object
+    response.humanBoard = humanBoard.print();
+    response.computerBoard = computerBoard.print();
     response.humanShipCoordinates = humanBoard.getShips().map(element => element.coordinates);
     response.computerShipCoordinates = computerBoard.getShips().map(element => element.coordinates);
+
+    if (humanBoard.allSunk()) {
+      response.winner = 'computer';
+    }
+    else if (computerBoard.allSunk()) {
+      response.winner = 'human';
+    }
+    else {
+      response.winner = null;
+    }
 
     return response;
   }
@@ -60,6 +72,8 @@ const Game = function(humanPlayer, computerPlayer) {
     // build the response object
     response.humanBoard = humanBoard.print();
     response.computerBoard = computerBoard.print();
+    response.humanShipCoordinates = humanBoard.getShips().map(element => element.coordinates);
+    response.computerShipCoordinates = computerBoard.getShips().map(element => element.coordinates);
 
     if (humanBoard.allSunk()) {
       response.winner = 'computer';

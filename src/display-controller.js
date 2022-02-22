@@ -2,19 +2,21 @@ const DisplayController = function(Game, Display) {
   const game = Game;
   const display = Display;
 
-  function handleStart() {
-    const response = game.initialize();
+  // bind the display's start button to the start method
+  display.handleStart(start);
 
-    display.render(response);
+  function start() {
+    const response = game.turn([0, 0]);
+
+    console.log(response);
+    // display.render(response);
   }
 
-  function handleAttack(coordinate) {
+  function attack(coordinate) {
     const response = game.turn(coordinate);
 
     display.render(response);
   }
-
-  return { handleStart, handleAttack }
 }
 
 export default DisplayController;
