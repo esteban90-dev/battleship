@@ -2,6 +2,8 @@ const Display = function() {
   const startButton = document.querySelector('#start');
   const humanBoard = document.querySelector('#humanBoard');
   const computerBoard = document.querySelector('#computerBoard');
+  const humanStatus = document.querySelector('#humanStatus');
+  const computerStatus = document.querySelector('#computerStatus');
 
   function bindStartButton(handler) {
     startButton.addEventListener('click', handler);
@@ -15,6 +17,14 @@ const Display = function() {
   }
 
   function render(gameResponse) {
+    // clear the status areas
+    humanStatus.innerHTML = '';
+    computerStatus.innerHTML = '';
+
+    // display remaining ships
+    humanStatus.innerHTML = `Remaining ships: ${gameResponse.humanShipsRemaining}`;
+    computerStatus.innerHTML = `Remaining ships: ${gameResponse.computerShipsRemaining}`;
+
     // clear the boards 
     humanBoard.innerHTML = '';
     computerBoard.innerHTML = '';

@@ -44,6 +44,8 @@ const Game = function(humanPlayer, computerPlayer) {
     // build the response object
     response.humanBoard = humanBoard.print();
     response.computerBoard = computerBoard.print();
+    response.humanShipsRemaining = humanBoard.getRemainingShips();
+    response.computerShipsRemaining = computerBoard.getRemainingShips();
     response.humanShipCoordinates = humanBoard.getShips().map(element => element.coordinates);
     response.computerShipCoordinates = computerBoard.getShips().map(element => element.coordinates);
 
@@ -72,6 +74,8 @@ const Game = function(humanPlayer, computerPlayer) {
     // build the response object
     response.humanBoard = humanBoard.print();
     response.computerBoard = computerBoard.print();
+    response.humanShipsRemaining = humanBoard.getRemainingShips();
+    response.computerShipsRemaining = computerBoard.getRemainingShips();
     response.humanShipCoordinates = humanBoard.getShips().map(element => element.coordinates);
     response.computerShipCoordinates = computerBoard.getShips().map(element => element.coordinates);
 

@@ -52,6 +52,7 @@ describe('game.initialize()', () => {
     clear: jest.fn(() => {}),
     print: () => {},
     allSunk: () => {},
+    getRemainingShips: () => {},
   }
 
   const computerBoard = {
@@ -60,6 +61,7 @@ describe('game.initialize()', () => {
     clear: jest.fn(() => {}),
     print: () => {},
     allSunk: () => {},
+    getRemainingShips: () => {},
   }
 
   const fakeHumanPlayer = {
@@ -96,6 +98,7 @@ describe('game.turn()', () => {
     receiveAttack: () => {},
     print: () => {},
     getShips: () => [],
+    getRemainingShips: () => {},
   }
 
   const notLosingBoard = {
@@ -103,6 +106,7 @@ describe('game.turn()', () => {
     receiveAttack: () => {},
     print: () => {},
     getShips: () => [],
+    getRemainingShips: () => {},
   }
 
   describe('no winner yet', () => {

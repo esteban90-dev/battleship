@@ -231,7 +231,17 @@ const GameBoard = function(ShipFactory) {
     attacks = [];
   }
 
-  return { getShips, getMisses, getAttacks, getHits, getSize, placeShip, receiveAttack, allSunk, print, clear }
+  function getRemainingShips() {
+    let remainingShips = 0;
+    ships.forEach((shipEntry) => {
+      if (!shipEntry.ship.isSunk()) {
+        remainingShips += 1;
+      }
+    });
+    return remainingShips;
+  }
+
+  return { getShips, getMisses, getAttacks, getHits, getSize, getRemainingShips, placeShip, receiveAttack, allSunk, print, clear }
 }
 
 export default GameBoard;

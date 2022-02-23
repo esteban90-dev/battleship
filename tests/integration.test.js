@@ -38,6 +38,8 @@ describe('game.initialize()', () => {
         [[8, 7], [8, 8], [8, 9]],
         [[9, 5], [9, 6]]
       ],
+      humanShipsRemaining: 5,
+      computerShipsRemaining: 5,
       humanBoard: [
         ['', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],
@@ -91,6 +93,8 @@ describe('game.turn()', () => {
         [[8, 7], [8, 8], [8, 9]],
         [[9, 5], [9, 6]],
       ],
+      humanShipsRemaining: 5,
+      computerShipsRemaining: 5,
       humanBoard: [
         ['', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],

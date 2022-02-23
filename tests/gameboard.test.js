@@ -292,3 +292,17 @@ describe('gameboard.clear()', () => {
   });
 
 });
+
+describe('gameboard.getRemainingShips()', () => {
+
+  test('it returns the number of ships that have not been sunk', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([0, 0], 3, 0);
+    board.placeShip([5, 0], 3, 0);
+
+    expect(board.getRemainingShips()).toBe(2);
+  });
+
+});
