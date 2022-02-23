@@ -91,6 +91,33 @@ describe('game.initialize()', () => {
 
 });
 
+describe('game.getHumanBoard()', () => {
+
+  const humanBoard = {
+    test: {}
+  }
+
+  const computerBoard = {
+    test: {}
+  }
+
+  const fakeHumanPlayer = {
+    getBoard: () => humanBoard,
+  };
+
+  const fakeComputerPlayer = {
+    getBoard: () => computerBoard,
+    attack: () => {},
+  };
+
+  test('it returns the human board', () => {
+    const game = Game(fakeHumanPlayer, fakeComputerPlayer);
+
+    expect(game.getHumanBoard()).toEqual(computerBoard);
+  });
+
+});
+
 describe('game.turn()', () => {
 
   const losingBoard = {

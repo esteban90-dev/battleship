@@ -92,7 +92,11 @@ const Game = function(humanPlayer, computerPlayer) {
     return response;
   }
 
-  return { initialize, turn }
+  function getHumanBoard() {
+    return humanBoard;
+  }
+
+  return { initialize, turn, getHumanBoard }
 
 }
 
