@@ -26,7 +26,7 @@ const Display = function() {
     computerStatus.innerHTML = `Remaining ships: ${gameResponse.computerShipsRemaining}`;
   }
 
-  function render(gameResponse) {
+  function renderBoards(gameResponse) {
     // clear the boards 
     humanBoard.innerHTML = '';
     computerBoard.innerHTML = '';
@@ -77,7 +77,7 @@ const Display = function() {
     }
   }
 
-  return { bindStartButton, bindAttackButtons, render, renderStatuses }
+  return { bindStartButton, bindAttackButtons, renderBoards, renderStatuses }
 }
 
 export default Display;

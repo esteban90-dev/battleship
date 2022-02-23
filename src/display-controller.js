@@ -8,7 +8,7 @@ const DisplayController = function(Game, Display) {
   function start() {
     const response = game.initialize();
 
-    display.render(response);
+    display.renderBoards(response);
 
     // bind computer board buttons to the attack method
     display.bindAttackButtons(attack);
@@ -20,7 +20,7 @@ const DisplayController = function(Game, Display) {
     const response = game.turn(coordinate);
 
     display.renderStatuses(response);
-    display.render(response);
+    display.renderBoards(response);
 
     // bind computer board buttons to the attack method unless there is a winner
     if (!response.winner) {
