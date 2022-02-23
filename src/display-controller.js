@@ -19,6 +19,7 @@ const DisplayController = function(Game, Display) {
     const coordinate = [parseInt(id.slice(1)[0]), parseInt(id.slice(1)[1])];
     const response = game.turn(coordinate);
 
+    display.renderStatuses(response);
     display.render(response);
 
     // bind computer board buttons to the attack method unless there is a winner

@@ -16,7 +16,7 @@ const Display = function() {
     });
   }
 
-  function render(gameResponse) {
+  function renderStatuses(gameResponse) {
     // clear the status areas
     humanStatus.innerHTML = '';
     computerStatus.innerHTML = '';
@@ -24,7 +24,9 @@ const Display = function() {
     // display remaining ships
     humanStatus.innerHTML = `Remaining ships: ${gameResponse.humanShipsRemaining}`;
     computerStatus.innerHTML = `Remaining ships: ${gameResponse.computerShipsRemaining}`;
+  }
 
+  function render(gameResponse) {
     // clear the boards 
     humanBoard.innerHTML = '';
     computerBoard.innerHTML = '';
@@ -75,7 +77,7 @@ const Display = function() {
     }
   }
 
-  return { bindStartButton, bindAttackButtons, render }
+  return { bindStartButton, bindAttackButtons, render, renderStatuses }
 }
 
 export default Display;
