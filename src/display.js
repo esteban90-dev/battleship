@@ -26,13 +26,12 @@ const Display = function() {
     computerStatus.innerHTML = `Remaining ships: ${gameResponse.computerShipsRemaining}`;
   }
 
-  function renderBoards(gameResponse) {
-    // clear the boards 
+  function renderHumanBoard(boardArr, shipCoordinates) {
+    // clear the board
     humanBoard.innerHTML = '';
-    computerBoard.innerHTML = '';
 
     // display the human's board
-    gameResponse.humanBoard.forEach((gridRow, rowIndex) => {
+    boardArr.forEach((gridRow, rowIndex) => {
       const row = document.createElement('div');
       row.classList.add('grid-row');
       gridRow.forEach((gridPoint, pointIndex) => {
@@ -40,8 +39,8 @@ const Display = function() {
         const boardButtonId = `h${rowIndex}${pointIndex}`;
         boardButton.setAttribute('id', boardButtonId);
         boardButton.classList.add('human-button');
-        boardButton.innerHTML = gameResponse.humanBoard[rowIndex][pointIndex];
-        gameResponse.humanShipCoordinates.forEach((shipCoordinatesArray) => {
+        boardButton.innerHTML = boardArr[rowIndex][pointIndex];
+        shipCoordinates.forEach((shipCoordinatesArray) => {
           shipCoordinatesArray.forEach((shipCoordinate) => {
             if (shipCoordinate[0] === rowIndex && shipCoordinate[1] === pointIndex) {
               boardButton.classList.add('ship-present');
@@ -52,9 +51,14 @@ const Display = function() {
       });
       humanBoard.appendChild(row);
     });
+  }
+
+  function renderComputerBoard(boardArr) {
+    // clear the board
+    computerBoard.innerHTML = '';
 
     // display the computer's board
-    gameResponse.computerBoard.forEach((gridRow, rowIndex) => {
+    boardArr.forEach((gridRow, rowIndex) => {
       const row = document.createElement('div');
       row.classList.add('grid-row');
       gridRow.forEach((gridPoint, pointIndex) => {
@@ -62,7 +66,7 @@ const Display = function() {
         const boardButtonId = `c${rowIndex}${pointIndex}`;
         boardButton.setAttribute('id', boardButtonId);
         boardButton.classList.add('computer-button');
-        boardButton.innerHTML = gameResponse.computerBoard[rowIndex][pointIndex];
+        boardButton.innerHTML = boardArr[rowIndex][pointIndex];
         row.appendChild(boardButton);
       });
       computerBoard.appendChild(row);
@@ -76,7 +80,7 @@ const Display = function() {
     winnerContainer.appendChild(winnerMessage);
   }
 
-  return { bindStartButton, bindAttackButtons, renderBoards, renderStatuses, renderWinner }
+  return { bindStartButton, bindAttackButtons, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner }
 }
 
 export default Display;

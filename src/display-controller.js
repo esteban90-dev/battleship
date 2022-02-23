@@ -8,7 +8,8 @@ const DisplayController = function(Game, Display) {
   function start() {
     const response = game.initialize();
 
-    display.renderBoards(response);
+    display.renderHumanBoard(response.humanBoard, response.humanShipCoordinates);
+    display.renderComputerBoard(response.computerBoard);
 
     // bind computer board buttons to the attack method
     display.bindAttackButtons(attack);
@@ -20,7 +21,8 @@ const DisplayController = function(Game, Display) {
     const response = game.turn(coordinate);
 
     display.renderStatuses(response);
-    display.renderBoards(response);
+    display.renderHumanBoard(response.humanBoard, response.humanShipCoordinates);
+    display.renderComputerBoard(response.computerBoard);
     
     if (response.winner) {
       display.renderWinner(response.winner);
