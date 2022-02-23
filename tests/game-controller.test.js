@@ -31,3 +31,54 @@ describe('instantiation', () => {
   });
 
 });
+
+describe('init()', () => {
+
+  let humanBoard;
+  let computerBoard;
+  let computerPlayer;
+  let display;
+  let gameController;
+  let printedComputerBoard;
+  let printedHumanBoard;
+  let shipCoordinates;
+
+  beforeEach(() => {
+    humanBoard = { 
+      receiveAttack: () => {},
+      print: () => 'printed human board',
+      getShips: () => [],
+    };
+
+    computerBoard = {
+      receiveAttack: () => {},
+      print: () => 'printed computer board',
+      getShips: () => [],
+    };
+
+    computerPlayer = { getBoard: () => computerBoard };
+
+    display = {
+      renderHumanBoard: jest.fn((printedHumanBoard) => {}),
+      renderComputerBoard: jest.fn((printedComputerBoard) => {}),
+    }
+
+    gameController = GameController(computerPlayer, humanBoard, display);
+    printedComputerBoard = computerBoard.print();
+    printedHumanBoard = humanBoard.print();
+    shipCoordinates = [];
+  });
+
+  test('it calls display.renderHumanBoard() with the printed human board and ship coordinates', () => {
+    gameController.init();
+
+    expect(display.renderHumanBoard).toHaveBeenCalledWith(printedHumanBoard, shipCoordinates);
+  });
+
+  test('it calls display.renderComputerBoard() with the printed computer board', () => {
+    gameController.init();
+
+    expect(display.renderComputerBoard).toHaveBeenCalledWith(printedComputerBoard);
+  });
+
+});

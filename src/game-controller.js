@@ -1,19 +1,31 @@
-const GameController = function(computerPlayer, humanBoard, display) {
-  if (!computerPlayer || !humanBoard || !display) {
+const GameController = function(ComputerPlayer, HumanBoard, Display) {
+  if (!ComputerPlayer || !HumanBoard || !Display) {
     throw('computer player, human board, and display objects must be provided');
   }
 
-  if (!computerPlayer.getBoard) {
+  if (!ComputerPlayer.getBoard) {
     throw('computer player must respond to getBoard() method');
   }
 
-  if (!humanBoard.receiveAttack) {
+  if (!HumanBoard.receiveAttack) {
     throw('human board must respond to receiveAttack() method');
   }
 
-  if (!display.renderHumanBoard) {
+  if (!Display.renderHumanBoard) {
     throw('display must respond to renderHumanBoard() method');
   }
+
+  const display = Display;
+  const computerPlayer = ComputerPlayer;
+  const humanBoard = HumanBoard;
+
+  function init() {
+    const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
+    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+    display.renderComputerBoard(computerPlayer.getBoard().print());
+  }
+
+  return { init };
 }
 
 export default GameController;
