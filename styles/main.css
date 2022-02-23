@@ -2,18 +2,27 @@
   display: flex;
 }
 
-#computerBoard {
+.computer-container {
   margin-left: 50px;
 }
 
 .human-button {
   height: 50px;
   width: 50px;
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .computer-button {
   height: 50px;
   width: 50px;
+  border: 1px solid;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid-row {
@@ -21,5 +30,5 @@
 }
 
 .ship-present {
-  background-color: red;
+  background-color: gray;
 }
