@@ -21,6 +21,10 @@ const DisplayController = function(Game, Display) {
 
     display.renderStatuses(response);
     display.renderBoards(response);
+    
+    if (response.winner) {
+      display.renderWinner(response.winner);
+    }
 
     // bind computer board buttons to the attack method unless there is a winner
     if (!response.winner) {
