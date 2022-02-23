@@ -94,6 +94,33 @@ describe('game.initialize()', () => {
 describe('game.getHumanBoard()', () => {
 
   const humanBoard = {
+    test: 'human',
+  }
+
+  const computerBoard = {
+    test: 'computer',
+  }
+
+  const fakeHumanPlayer = {
+    getBoard: () => humanBoard,
+  };
+
+  const fakeComputerPlayer = {
+    getBoard: () => computerBoard,
+    attack: () => {},
+  };
+
+  test('it returns the human board', () => {
+    const game = Game(fakeHumanPlayer, fakeComputerPlayer);
+
+    expect(game.getHumanBoard()).toEqual(humanBoard);
+  });
+
+});
+
+describe('game.getComputerBoard()', () => {
+
+  const humanBoard = {
     test: {}
   }
 
@@ -110,10 +137,10 @@ describe('game.getHumanBoard()', () => {
     attack: () => {},
   };
 
-  test('it returns the human board', () => {
+  test('it returns the computer board', () => {
     const game = Game(fakeHumanPlayer, fakeComputerPlayer);
 
-    expect(game.getHumanBoard()).toEqual(computerBoard);
+    expect(game.getComputerBoard()).toEqual(computerBoard);
   });
 
 });

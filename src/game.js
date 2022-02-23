@@ -96,7 +96,11 @@ const Game = function(humanPlayer, computerPlayer) {
     return humanBoard;
   }
 
-  return { initialize, turn, getHumanBoard }
+  function getComputerBoard() {
+    return computerBoard;
+  }
+
+  return { initialize, turn, getHumanBoard, getComputerBoard }
 
 }
 
