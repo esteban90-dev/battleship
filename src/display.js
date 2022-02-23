@@ -55,6 +55,14 @@ const Display = function() {
       });
       computerBoard.appendChild(row);
     });
+
+    // display winner if applicable
+    if (gameResponse.winner) {
+      const winnerContainer = document.querySelector('#winner');
+      const winnerMessage = document.createElement('p');
+      winnerMessage.innerHTML = `${gameResponse.winner} is the winner!`;
+      winnerContainer.appendChild(winnerMessage);
+    }
   }
 
   return { bindStartButton, bindAttackButtons, render }
