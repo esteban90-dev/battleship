@@ -3,18 +3,27 @@ const DisplayController = function(Game, Display) {
   const display = Display;
 
   // bind the display's start button to the start method
-  display.handleStart(start);
+  display.bindStartButton(start);
 
   function start() {
     const response = game.initialize();
 
     display.render(response);
+
+    // bind computer board buttons to the attack method
+    display.bindAttackButtons(attack);
   }
 
-  function attack(coordinate) {
+  function attack(event) {
+    const id = event.target.getAttribute('id');
+    const coordinate = [parseInt(id.slice(1)[0]), parseInt(id.slice(1)[1])];
     const response = game.turn(coordinate);
 
+    console.log(response);
     display.render(response);
+
+    // bind computer board buttons to the attack method
+    display.bindAttackButtons(attack);
   }
 }
 
