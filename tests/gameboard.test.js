@@ -38,11 +38,41 @@ describe('GameBoard instantiation', () => {
 
 describe('gameboard.placeShip()', () => {
 
+  test('raises an error when some or all ship coordinates do not exist on the board', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(() => board.placeShip([[-1, -1], [-1, 0]])).toThrow('invalid ship position');
+  });
+
+  test('raises an error when some or all ship coordinates overlap with an existing ship', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [0, 1]]);
+
+    expect(() => board.placeShip([[0, 0], [1, 0]])).toThrow('invalid ship position');
+  });
+
+  test('raises an error if coordinates are repeated', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(() => board.placeShip([[0, 0], [0, 0]])).toThrow('invalid ship position');
+  });
+
+  test('raises an error if coordinates are not in a straight line', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(() => board.placeShip([[0, 0], [2, 0]])).toThrow('invalid ship position');
+  });
+
   test('creates a new ship entry when placing a ship in the +y direction', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 5, 0);
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
 
     expect(board.getShips()[0].coordinates).toEqual([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
 
@@ -55,36 +85,13 @@ describe('gameboard.placeShip()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 5, 1);
+    board.placeShip([[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
 
     expect(board.getShips()[0].coordinates).toEqual([[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
 
     // verify ship entry has a valid ship object
     expect(board.getShips()[0].ship.hit).toBeDefined();
     expect(board.getShips()[0].ship.isSunk).toBeDefined();
-  });
-
-  test('raises an error when some or all ship coordinates do not exist on the board', () => {
-    const shipFactory = mockShipFactoryUnSunk;
-    const board = GameBoard(shipFactory);
-
-    expect(() => board.placeShip([-1, -1], 5, 0)).toThrow('invalid ship position');
-  });
-
-  test('raises an error when some or all ship coordinates overlap with an existing ship', () => {
-    const shipFactory = mockShipFactoryUnSunk;
-    const board = GameBoard(shipFactory);
-
-    board.placeShip([0, 0], 5, 0);
-
-    expect(() => board.placeShip([0, 0], 5, 1)).toThrow('invalid ship position');
-  });
-
-  test('raises an error if the direction argument is not a 1 or 0', () => {
-    const shipFactory = mockShipFactoryUnSunk;
-    const board = GameBoard(shipFactory);
-
-    expect(() => board.placeShip([0, 0], 5, 3)).toThrow('invalid ship direction');
   });
       
 });
@@ -95,7 +102,7 @@ describe('gameboard.receiveAttack()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([5, 5], 5, 0);
+    board.placeShip([[5, 5], [6, 5], [7, 5], [8, 5], [9, 5]]);
     board.receiveAttack([5, 5]);
 
     expect(board.getShips()[0].ship.hit).toHaveBeenCalledWith(0);
@@ -105,7 +112,7 @@ describe('gameboard.receiveAttack()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([5, 5], 5, 0);
+    board.placeShip([[5, 5], [6, 5], [7, 5], [8, 5], [9, 5]]);
     board.receiveAttack([5, 8]);
 
     expect(board.getShips()[0].ship.hit).not.toHaveBeenCalled;
@@ -123,7 +130,7 @@ describe('gameboard.receiveAttack()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 9], 5, 0);
+    board.placeShip([[0, 9], [1, 9], [2, 9], [3, 9]]);
     board.receiveAttack([0, 9]);
 
     expect(() => board.receiveAttack([0, 9])).toThrow('invalid attack coordinate');
@@ -137,8 +144,8 @@ describe('gameboard.allSunk()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 1);
-    board.placeShip([9, 0], 3, 1);
+    board.placeShip([[0, 0], [1, 0], [2, 0]]);
+    board.placeShip([[8, 5], [8, 6], [8, 7]]);
 
     expect(board.allSunk()).toBe(false);
   });
@@ -147,8 +154,8 @@ describe('gameboard.allSunk()', () => {
     const shipFactory = mockShipFactorySunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 1);
-    board.placeShip([9, 0], 3, 1);
+    board.placeShip([[0, 0], [1, 0], [2, 0]]);
+    board.placeShip([[8, 5], [8, 6], [8, 7]]);
 
     expect(board.allSunk()).toBe(true);
   });
@@ -161,7 +168,7 @@ describe('gameboard.getAttacks()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 1);
+    board.placeShip([[0, 0], [1, 0], [2, 0]]);
     board.receiveAttack([0, 0]);
     board.receiveAttack([5, 5]);
 
@@ -187,7 +194,7 @@ describe('gameboard.getHits()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 1);
+    board.placeShip([[0, 0], [1, 0], [2, 0]]);
     board.receiveAttack([0, 0]);
     board.receiveAttack([5, 5]);
 
@@ -214,7 +221,7 @@ describe('gameboard.print()', () => {
       ['', '', '', '', '', '', '', '', '', ''],
     ];
 
-    board.placeShip([0, 0], 3, 1);
+    board.placeShip([[0, 0], [1, 0], [2, 0]]);
     board.receiveAttack([0, 0]);
     board.receiveAttack([5, 1]);
 
@@ -238,8 +245,8 @@ describe('gameboard.print()', () => {
     ];
 
     // place pre-sunken ships
-    board.placeShip([0, 0], 3, 1);
-    board.placeShip([3, 0], 3, 0);
+    board.placeShip([[0, 0], [0, 1], [0, 2]]);
+    board.placeShip([[3, 0], [4, 0], [5, 0]]);
 
     expect(board.print()).toEqual(expected);
   });
@@ -252,7 +259,7 @@ describe('gameboard.clear()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 0);
+    board.placeShip([[0, 0], [0, 1], [0, 2]]);
     board.clear();
 
     expect(board.getShips()).toEqual([]);
@@ -262,7 +269,7 @@ describe('gameboard.clear()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 0);
+    board.placeShip([[0, 0], [0, 1], [0, 2]]);
     board.receiveAttack([5, 5]);
     board.clear();
 
@@ -273,7 +280,7 @@ describe('gameboard.clear()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 0);
+    board.placeShip([[0, 0], [0, 1], [0, 2]]);
     board.receiveAttack([0, 0]);
     board.clear();
 
@@ -284,7 +291,7 @@ describe('gameboard.clear()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 0);
+    board.placeShip([[0, 0], [0, 1], [0, 2]]);
     board.receiveAttack([0, 0]);
     board.clear();
 
@@ -299,8 +306,8 @@ describe('gameboard.getRemainingShips()', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    board.placeShip([0, 0], 3, 0);
-    board.placeShip([5, 0], 3, 0);
+    board.placeShip([[0, 0], [0, 1], [0, 2]]);
+    board.placeShip([[7, 0], [7, 1], [7, 2]]);
 
     expect(board.getRemainingShips()).toBe(2);
   });

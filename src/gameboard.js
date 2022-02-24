@@ -24,46 +24,142 @@ const GameBoard = function(ShipFactory) {
     return misses;
   }
 
-  function placeShip(startCoordinate, shipLength, direction) {
-    const coordinates = [];
-    let currentCoordinate;
-    let i = 0;
+  function placeShip(coordinates) {
+    // throw error if any coordinates don't exist on the board
+    coordinates.forEach((coordinate) => {
+      let yCoordinate = coordinate[0];
+      let xCoordinate = coordinate[1];
 
-    currentCoordinate = startCoordinate;
-
-    // throw an error if the direction argument is incorrect
-    if (direction !== 0 && direction !== 1) {
-      throw('invalid ship direction');
-    }
-
-    // if direction is 0, determine remaining coordinates in the +y direction
-    if (direction === 0) {
-      while (i < shipLength) {
-        coordinates.push(currentCoordinate.slice(0));
-        currentCoordinate[0] += 1;
-        i += 1;
+      if (yCoordinate > gridHeight - 1 || yCoordinate < 0 || xCoordinate > gridLength - 1) {
+        throw('invalid ship position');
       }
+    });
+
+    // throw error if any coordinates overlap with an existing ship
+    coordinates.forEach((coordinate) => {
+      let yCoordinate = coordinate[0];
+      let xCoordinate = coordinate[1];
+
+      ships.forEach((shipEntry) => {
+        shipEntry.coordinates.forEach((occupiedCoordinate) => {
+          let occupiedYCoordinate = occupiedCoordinate[0];
+          let occupiedXCoordinate = occupiedCoordinate[1];
+
+          if (occupiedYCoordinate === yCoordinate && occupiedXCoordinate === xCoordinate) {
+            throw('invalid ship position');
+          }
+        });
+      });
+    });
+
+    // throw error if coordinates are repeated
+    if (hasDuplicateCoordinates(coordinates)) {
+      throw('invalid ship position');
     }
 
-    // if direction is 1, determine remaining coordinates in the +x direction
-    if (direction === 1) {
-      while (i < shipLength) {
-        coordinates.push(currentCoordinate.slice(0));
-        currentCoordinate[1] += 1;
-        i += 1;
-      }
-    }
-
-    // throw an error if any coordindates are not on the board or if any coordinates are unavailable
-    if (!coordinates.every(isValidCoordinate) || !coordinates.every(isCoordinateAvailable)) {
+    // throw error if coordinates are not in a straight line
+    if (!isInLine(coordinates)) {
       throw('invalid ship position');
     }
 
     // create the new ship entry
     ships.push({
       coordinates: coordinates,
-      ship: shipFactory(shipLength),
+      ship: shipFactory(coordinates.length),
     });
+  }
+
+  function isInLine(coordinates) {
+    let result = false;
+    let yCoordinates = coordinates.map(coordinate => coordinate[0]);
+    let xCoordinates = coordinates.map(coordinate => coordinate[1]);
+
+    // if y coordinates are increasing sequentially and x coordinates are the same, then the coordinates are in line
+    if (isIncreasing(yCoordinates)
+      && xCoordinates.every((element) => element === xCoordinates[0])) {
+      result = true;
+    }
+
+    // if y coordinates are decreasing sequentially and x coordinates are the same, then the coordinates are in line
+    if (isDecreasing(yCoordinates)
+      && xCoordinates.every((element) => element === xCoordinates[0])) {
+      result = true;
+    }
+
+    // if x coordinates are increasing sequentially and y coordinates are the same, then the coordinates are in line
+    if (isIncreasing(xCoordinates)
+      && yCoordinates.every((element) => element === yCoordinates[0])) {
+      result = true;
+    }
+
+    // if x coordinates are decreasing sequentially and y coordinates are the same, then the coordinates are in line
+    if (isDecreasing(xCoordinates)
+      && yCoordinates.every((element) => element === yCoordinates[0])) {
+      result = true;
+    }
+
+    return result;
+  }
+
+  function isIncreasing(array) {
+    // returns true if array elements are increasing
+    // for example, [0, 1, 2, 3] is an increasing array
+    let result = true;
+    let previous = array[0];
+
+    array.forEach((element, index) => {
+      if (index > 0) {
+        if (element !== previous + 1) {
+          result = false;
+        }
+        previous = element;
+      }
+    });
+
+    if (array.length <= 1) {
+      result = false;
+    }
+
+    return result;
+  }
+
+  function isDecreasing(array) {
+    // returns true if array elements are decreasing
+    // for example, [4, 3, 2, 1] is a decreasing array
+    let result = true;
+    let previous = array[0];
+
+    array.forEach((element, index) => {
+      if (index > 0) {
+        if (element !== previous - 1) {
+          result = false;
+        }
+        previous = element;
+      }
+    });
+
+    if (array.length <= 1) {
+      result = false;
+    }
+
+    return result;
+  }
+
+  function hasDuplicateCoordinates(coordinates) {
+    // return true if any coordinates are duplicated
+    let visitedCoordinates = [];
+    let result = false;
+
+    coordinates.forEach((coordinate) => {
+      visitedCoordinates.forEach((visitedCoordinate) => {
+        if (visitedCoordinate[0] === coordinate[0] && visitedCoordinate[1] === coordinate[1]) {
+          result = true;
+        }
+      });
+      visitedCoordinates.push(coordinate);
+    });
+
+    return result;
   }
 
   function hasBeenAttacked(coordinate) {
