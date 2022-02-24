@@ -63,11 +63,19 @@ const GameBoard = function(ShipFactory) {
       throw('invalid ship position');
     }
 
+    // throw error if length of coordinates array doesnt match the last entry in the remainingPlacements array
+    if (coordinates.length !== getNextPlacement()) {
+      throw('invalid ship position');
+    }
+
     // create the new ship entry
     ships.push({
       coordinates: coordinates,
       ship: shipFactory(coordinates.length),
     });
+
+    // pop the last entry off the remainingPlacements array
+    remainingPlacements.pop();
   }
 
   function isInLine(coordinates) {
@@ -346,7 +354,11 @@ const GameBoard = function(ShipFactory) {
     return true;
   }
 
-  return { getShips, getMisses, getAttacks, getHits, getSize, getRemainingShips, placeShip, receiveAttack, allSunk, print, clear, areAllShipsPlaced }
+  function getNextPlacement() {
+    return remainingPlacements[remainingPlacements.length - 1];
+  }
+
+  return { getShips, getMisses, getAttacks, getHits, getSize, getRemainingShips, placeShip, receiveAttack, allSunk, print, clear, areAllShipsPlaced, getNextPlacement }
 }
 
 export default GameBoard;
