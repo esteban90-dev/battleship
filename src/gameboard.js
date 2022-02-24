@@ -15,6 +15,7 @@ const GameBoard = function(ShipFactory) {
   let misses = [];
   let attacks = [];
   let hits = [];
+  const remainingPlacements = [2, 3, 3, 4, 5];
 
   function getShips() {
     return ships;
@@ -337,7 +338,15 @@ const GameBoard = function(ShipFactory) {
     return remainingShips;
   }
 
-  return { getShips, getMisses, getAttacks, getHits, getSize, getRemainingShips, placeShip, receiveAttack, allSunk, print, clear }
+  function areAllShipsPlaced() {
+    if (remainingPlacements.length > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  return { getShips, getMisses, getAttacks, getHits, getSize, getRemainingShips, placeShip, receiveAttack, allSunk, print, clear, areAllShipsPlaced }
 }
 
 export default GameBoard;

@@ -313,3 +313,14 @@ describe('gameboard.getRemainingShips()', () => {
   });
 
 });
+
+describe('gameboard.areAllShipsPlaced()', () => {
+
+  test('returns false if the remainingPlacements array is not empty', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(board.areAllShipsPlaced()).toBe(false);
+  });
+
+});

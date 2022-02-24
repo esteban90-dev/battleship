@@ -1,5 +1,14 @@
 import GameController from '../src/game-controller';
 
+let humanBoard;
+let computerBoard;
+let computerPlayer;
+let display;
+let gameController;
+let printedComputerBoard;
+let printedHumanBoard;
+let shipCoordinates;
+
 describe('instantiation', () => {
 
   test('it throws an error if called without arguments', () => {
@@ -33,15 +42,6 @@ describe('instantiation', () => {
 });
 
 describe('init()', () => {
-
-  let humanBoard;
-  let computerBoard;
-  let computerPlayer;
-  let display;
-  let gameController;
-  let printedComputerBoard;
-  let printedHumanBoard;
-  let shipCoordinates;
 
   beforeEach(() => {
     humanBoard = { 
@@ -82,3 +82,4 @@ describe('init()', () => {
   });
 
 });
+
