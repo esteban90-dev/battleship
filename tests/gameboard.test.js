@@ -341,6 +341,52 @@ describe('gameboard.getNextPlacement()', () => {
     expect(board.getNextPlacement()).toBe(4);
   });
 
+  test('returns 3 (representing a cruiser) if carrier and battleship have been placed', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+    board.placeShip([[0, 1], [1, 1], [2, 1], [3, 1]]);
+
+    expect(board.getNextPlacement()).toBe(3);
+  });
+
+  test('returns 3 (representing a submarine) if carrier, battleship, and cruiser have been placed', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+    board.placeShip([[0, 1], [1, 1], [2, 1], [3, 1]]);
+    board.placeShip([[0, 2], [1, 2], [2, 2]]);
+
+    expect(board.getNextPlacement()).toBe(3);
+  });
+
+  test('returns 2 (representing a destroyer) if carrier, battleship, cruiser, and submarine have been placed', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+    board.placeShip([[0, 1], [1, 1], [2, 1], [3, 1]]);
+    board.placeShip([[0, 2], [1, 2], [2, 2]]);
+    board.placeShip([[0, 3], [1, 3], [2, 3]]);
+
+    expect(board.getNextPlacement()).toBe(2);
+  });
+
+  test('returns undefined if carrier, battleship, cruiser, submarine, and destroyer have been placed', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+    board.placeShip([[0, 1], [1, 1], [2, 1], [3, 1]]);
+    board.placeShip([[0, 2], [1, 2], [2, 2]]);
+    board.placeShip([[0, 3], [1, 3], [2, 3]]);
+    board.placeShip([[0, 4], [1, 4]]);
+
+    expect(board.getNextPlacement()).toBe(undefined);
+  });
+
 });
 
 describe('gameboard.areAllShipsPlaced()', () => {
