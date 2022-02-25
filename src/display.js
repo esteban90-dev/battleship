@@ -5,6 +5,7 @@ const Display = function() {
   const computerStatus = document.querySelector('#computerStatus');
   const verticalButton = document.querySelector('#vertical');
   const horizontalButton = document.querySelector('#horizontal');
+  const pShipsRemaining = document.querySelector('#shipsRemaining');
   let nextPlacementSize;
   let orientation = activeOrientation();
 
@@ -263,7 +264,11 @@ const Display = function() {
     nextPlacementSize = size;
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize }
+  function renderRemainingPlacements() {
+    pShipsRemaining.innerHTML = `Remaining ships to be placed: ${nextPlacementSize}`;
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements }
 }
 
 export default Display;
