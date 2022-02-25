@@ -25,7 +25,13 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     display.renderComputerBoard(computerPlayer.getBoard().print());
   }
 
-  return { init };
+  function receivePlacement(coordinates) {
+    humanBoard.placeShip(coordinates);
+    const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
+    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+  }
+
+  return { init, receivePlacement };
 }
 
 export default GameController;

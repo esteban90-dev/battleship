@@ -83,3 +83,44 @@ describe('init()', () => {
 
 });
 
+describe('receivePlacement()', () => {
+
+  beforeEach(() => {
+    humanBoard = { 
+      placeShip: jest.fn((coordinates) => {}),
+      receiveAttack: () => {},
+      getShips: () => [],
+      print: () => 'printed human board',
+    };
+
+    computerBoard = {};
+    computerPlayer = { getBoard: () => computerBoard };
+    printedHumanBoard = humanBoard.print();
+
+    display = {
+      renderHumanBoard: jest.fn((printedHumanBoard, shipCoordinates) => {}),
+      renderComputerBoard: jest.fn((printedComputerBoard) => {}),
+    }
+
+    gameController = GameController(computerPlayer, humanBoard, display);
+
+  });
+
+  test('it calls the human boards placeShip() method', () => {
+    const shipCoordinates = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]];
+
+    gameController.receivePlacement(shipCoordinates);
+
+    expect(humanBoard.placeShip).toHaveBeenCalledWith(shipCoordinates);
+  });
+
+  test('it calls display.renderHumanBoard() with the printed human board and ship coordinates', () => {
+    const shipCoordinates = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]];
+
+    gameController.receivePlacement(shipCoordinates);
+
+    expect(display.renderHumanBoard).toHaveBeenCalledWith(printedHumanBoard, []);
+  });
+
+});
+
