@@ -1,19 +1,19 @@
 const Display = function() {
-  const startButton = document.querySelector('#start');
   const humanBoard = document.querySelector('#humanBoard');
   const computerBoard = document.querySelector('#computerBoard');
   const humanStatus = document.querySelector('#humanStatus');
   const computerStatus = document.querySelector('#computerStatus');
-
-  function bindStartButton(handler) {
-    startButton.addEventListener('click', handler);
-  }
+  const form = document.querySelector('form');
 
   function bindAttackButtons(handler) {
     const computerBoardButtons = document.querySelectorAll('.computer-button');
     computerBoardButtons.forEach((button) => {
       button.addEventListener('click', handler);
     });
+  }
+
+  function bindForm(handler) {
+    form.addEventListener('submit', handler);
   }
 
   function renderStatuses(gameResponse) {
@@ -80,7 +80,7 @@ const Display = function() {
     winnerContainer.appendChild(winnerMessage);
   }
 
-  return { bindStartButton, bindAttackButtons, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner }
+  return { bindAttackButtons, bindForm, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner }
 }
 
 export default Display;

@@ -19,13 +19,19 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
   const computerPlayer = ComputerPlayer;
   const humanBoard = HumanBoard;
 
+  display.bindForm(receivePlacement);
+
   function init() {
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
   }
 
-  function receivePlacement(coordinates) {
+  function receivePlacement(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const coordinates = JSON.parse(formData.get('coordinates'));
+
     humanBoard.placeShip(coordinates);
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
