@@ -19,22 +19,22 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
   const computerPlayer = ComputerPlayer;
   const humanBoard = HumanBoard;
 
-  display.bindForm(receivePlacement);
-
   function init() {
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
+    display.setNextPlacementSize(humanBoard.getNextPlacement());
+    display.bindHumanGridButtonsForPlacement(receivePlacement);
   }
 
-  function receivePlacement(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const coordinates = JSON.parse(formData.get('coordinates'));
-
+  function receivePlacement(coordinates) {
     humanBoard.placeShip(coordinates);
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+    display.setNextPlacementSize(humanBoard.getNextPlacement());
+    if (!humanBoard.areAllShipsPlaced()) {
+      display.bindHumanGridButtonsForPlacement(receivePlacement);
+    }
   }
 
   return { init, receivePlacement };

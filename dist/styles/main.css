@@ -25,6 +25,10 @@
   align-items: center;
 }
 
+.highlight {
+  background-color: lightgreen;
+}
+
 .grid-row {
   display: flex;
 }

@@ -10,11 +10,10 @@
   <body>
     <header>
       <h1>Battleship</h1>
-      <form>
-        <label for="coordinates">Enter ship coordinates:</label>
-        <input type="text" id="coordinates" name="coordinates">
-        <input type="submit" value="place ship">
-      </form>
+      <label for="vertical">vertical</label>
+      <input type="radio" value="vertical" id="vertical" name="orientation" checked>
+      <label for="horizontal">horizontal</label>
+      <input type="radio" value="horizontal" id="horizontal" name="orientation">
     </header>
     <main>
       <div class="board-container">
