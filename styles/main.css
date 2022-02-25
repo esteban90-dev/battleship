@@ -25,7 +25,7 @@
   align-items: center;
 }
 
-.highlight {
+.highlight-green {
   background-color: lightgreen;
 }
 
@@ -35,4 +35,8 @@
 
 .ship-present {
   background-color: gray;
+}
+
+.highlight-red {
+  background-color: lightcoral;
 }
