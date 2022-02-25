@@ -18,6 +18,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
   const display = Display;
   const computerPlayer = ComputerPlayer;
   const humanBoard = HumanBoard;
+  const computerBoard = computerPlayer.getBoard();
 
   function init() {
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
@@ -34,9 +35,24 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.setNextPlacementSize(humanBoard.getNextPlacement());
     display.renderRemainingPlacements();
-    if (!humanBoard.areAllShipsPlaced()) {
+    if (humanBoard.areAllShipsPlaced()) {
+      display.bindComputerGridButtonsForAttack(receiveAttack);
+    }
+    else {
       display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
     }
+  }
+
+  function receiveAttack(coordinates) {
+    const computerGuess = computerPlayer.attack(); 
+    const humanShipCoordinates = humanBoard.getShips().map((shipEntry) => shipEntry.coordinates);
+
+    computerBoard.receiveAttack(coordinates);
+    humanBoard.receiveAttack(computerGuess);
+
+    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+    display.renderComputerBoard(computerPlayer.getBoard().print());
+    display.bindComputerGridButtonsForAttack(receiveAttack);
   }
 
   function testPlacement(coordinates) {

@@ -55,11 +55,9 @@ const Display = function() {
         // if coordinates are valid, highlight the buttons green
         // otherwise highlight them red
         if (hoverHandler(coordinates)) {
-          console.log('highlighting green');
           highlightGreen(ids);
         }
         else {
-          console.log('highlighting green');
           highlightRed(ids);
         }
       
@@ -82,8 +80,13 @@ const Display = function() {
 
   function bindComputerGridButtonsForAttack(handler) {
     const buttons = document.querySelectorAll('.computer-button');
-    buttons.forEach((button), () => {
-      button.addEventListener('click', handler);
+    buttons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        const id = event.target.getAttribute('id');
+        const coordinate = [parseInt(id.slice(1, 2)), parseInt(id.slice(2, 3))];
+
+        handler(coordinate);
+      });
     });
   }
 
