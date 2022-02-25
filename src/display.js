@@ -29,7 +29,7 @@ const Display = function() {
     return result;
   }
 
-  function bindHumanGridButtonsForPlacement(handler) {
+  function bindHumanGridButtonsForPlacement(hoverHandler, clickHandler) {
     const humanGridButtons = document.querySelectorAll('.human-button');
     humanGridButtons.forEach((button) => {
       button.addEventListener('mouseover', () => {
@@ -51,9 +51,19 @@ const Display = function() {
         // convert coordinates into ids
         const ids = coordinatesToIds(coordinates);
         
-        // illuminate buttons with matching ids
-        highlightGreen(ids);
+        // if coordinates are valid, highlight the buttons green
+        // otherwise highlight them red
+        if (hoverHandler(coordinates)) {
+          console.log('highlighting green');
+          highlightGreen(ids);
+        }
+        else {
+          console.log('highlighting green');
+          highlightRed(ids);
+        }
+      
       });
+
       button.addEventListener('click', () => {
         const idString = button.getAttribute('id');
         const coordinate = [parseInt(idString.slice(1, 2)), parseInt(idString.slice(2, 3))];
@@ -61,14 +71,17 @@ const Display = function() {
         // get remaining coordinates
         const coordinates = addRemainingCoordinates(coordinate);
 
-        handler(coordinates);
+        // only allow valid ship placements
+        if (hoverHandler(coordinates)) {
+          clickHandler(coordinates);
+        }
       });
     });
   }
 
   function bindComputerGridButtonsForAttack(handler) {
     const buttons = document.querySelectorAll('.computer-button');
-    buttons.forEach((button)), () => {
+    buttons.forEach((button), () => {
       button.addEventListener('click', handler);
     });
   }
@@ -76,15 +89,48 @@ const Display = function() {
   function highlightGreen(ids) {
     const humanGridButtons = document.querySelectorAll('.human-button');
 
+    // clear any red highlights on the board
+    humanGridButtons.forEach((button) => {
+      if (button.classList.contains('highlight-red')) {
+        button.classList.toggle('highlight-red');
+      }
+    });
+
+    // highlight matching buttons green
     humanGridButtons.forEach((button) => {
       if (ids.includes(button.getAttribute('id'))) {
-        if (!button.classList.contains('highlight')) {
-          button.classList.toggle('highlight');
+        if (!button.classList.contains('highlight-green')) {
+          button.classList.toggle('highlight-green');
         }
       }
       else {
-        if (button.classList.contains('highlight')) {
-          button.classList.toggle('highlight');
+        if (button.classList.contains('highlight-green')) {
+          button.classList.toggle('highlight-green');
+        }
+      }
+    });
+  }
+
+  function highlightRed(ids) {
+    const humanGridButtons = document.querySelectorAll('.human-button');
+
+    // clear any green highlights on the board
+    humanGridButtons.forEach((button) => {
+      if (button.classList.contains('highlight-green')) {
+        button.classList.toggle('highlight-green');
+      }
+    });
+
+    // highlight matching buttons red
+    humanGridButtons.forEach((button) => {
+      if (ids.includes(button.getAttribute('id'))) {
+        if (!button.classList.contains('highlight-red')) {
+          button.classList.toggle('highlight-red');
+        }
+      }
+      else {
+        if (button.classList.contains('highlight-red')) {
+          button.classList.toggle('highlight-red');
         }
       }
     });
