@@ -10,7 +10,11 @@
   <body>
     <header>
       <h1>Battleship</h1>
-      <input type="button" id="start" value="start game">
+      <form>
+        <label for="coordinates">Enter ship coordinates:</label>
+        <input type="text" id="coordinates" name="coordinates">
+        <input type="submit" value="place ship">
+      </form>
     </header>
     <main>
       <div class="board-container">
