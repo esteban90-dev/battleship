@@ -38,6 +38,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     if (humanBoard.areAllShipsPlaced()) {
       placeComputerShips();
       display.bindComputerGridButtonsForAttack(receiveAttack);
+      display.renderHumanAttackPrompt();
     }
     else {
       display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
@@ -57,15 +58,25 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     const humanShipCoordinates = humanBoard.getShips().map((shipEntry) => shipEntry.coordinates);
 
     computerBoard.receiveAttack(coordinates);
-    humanBoard.receiveAttack(computerGuess);
-
-    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
-    display.bindComputerGridButtonsForAttack(receiveAttack);
+    display.renderComputerAttackPrompt();
+    // add 2 second delay to simulate the computer thinking
+    sleep(2000).then(() => {
+      humanBoard.receiveAttack(computerGuess);
+      display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+      display.bindComputerGridButtonsForAttack(receiveAttack);
+      display.renderHumanAttackPrompt();
+    });
   }
 
   function testPlacement(coordinates) {
     return humanBoard.isValidPlacement(coordinates);
+  }
+
+  async function sleep(ms) {
+    return await new Promise((resolve, reject) => {
+      setTimeout(() => { resolve('complete') }, ms)
+    });
   }
 
   return { init, receivePlacement };

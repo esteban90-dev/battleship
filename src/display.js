@@ -6,6 +6,7 @@ const Display = function() {
   const verticalButton = document.querySelector('#vertical');
   const horizontalButton = document.querySelector('#horizontal');
   const pShipsRemaining = document.querySelector('#shipsRemaining');
+  const gamePromptContainer = document.querySelector('#gamePrompt');
   let nextPlacementSize;
   let orientation = activeOrientation();
 
@@ -271,7 +272,27 @@ const Display = function() {
     pShipsRemaining.innerHTML = `Remaining ships to be placed: ${nextPlacementSize}`;
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements }
+  function renderHumanAttackPrompt() {
+    // clear the game prompt container
+    gamePromptContainer.innerHTML = '';
+
+    // prompt the human to attack the computer
+    const p = document.createElement('p');
+    p.innerHTML = 'click on the computer board to place an attack';
+    gamePromptContainer.appendChild(p);
+  }
+
+  function renderComputerAttackPrompt() {
+    // clear the game prompt container
+    gamePromptContainer.innerHTML = '';
+
+    // display that the computer is guessing
+    const p = document.createElement('p');
+    p.innerHTML = 'computer is thinking...';
+    gamePromptContainer.appendChild(p);
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt }
 }
 
 export default Display;
