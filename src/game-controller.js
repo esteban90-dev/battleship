@@ -36,11 +36,20 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     display.setNextPlacementSize(humanBoard.getNextPlacement());
     display.renderRemainingPlacements();
     if (humanBoard.areAllShipsPlaced()) {
+      placeComputerShips();
       display.bindComputerGridButtonsForAttack(receiveAttack);
     }
     else {
       display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
     }
+  }
+
+  function placeComputerShips() {
+    computerBoard.placeShip([[5, 1], [6, 1], [7, 1], [8, 1], [9, 1]]);
+    computerBoard.placeShip([[1, 7], [2, 7], [3, 7], [4, 7]]);
+    computerBoard.placeShip([[0, 3], [1, 3], [2, 3]]);
+    computerBoard.placeShip([[7, 5], [8, 5], [9, 5]]);
+    computerBoard.placeShip([[7, 8], [7, 9]]);
   }
 
   function receiveAttack(coordinates) {
