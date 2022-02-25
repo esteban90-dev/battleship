@@ -26,45 +26,7 @@ const GameBoard = function(ShipFactory) {
   }
 
   function placeShip(coordinates) {
-    // throw error if any coordinates don't exist on the board
-    coordinates.forEach((coordinate) => {
-      let yCoordinate = coordinate[0];
-      let xCoordinate = coordinate[1];
-
-      if (yCoordinate > gridHeight - 1 || yCoordinate < 0 || xCoordinate > gridLength - 1) {
-        throw('invalid ship position');
-      }
-    });
-
-    // throw error if any coordinates overlap with an existing ship
-    coordinates.forEach((coordinate) => {
-      let yCoordinate = coordinate[0];
-      let xCoordinate = coordinate[1];
-
-      ships.forEach((shipEntry) => {
-        shipEntry.coordinates.forEach((occupiedCoordinate) => {
-          let occupiedYCoordinate = occupiedCoordinate[0];
-          let occupiedXCoordinate = occupiedCoordinate[1];
-
-          if (occupiedYCoordinate === yCoordinate && occupiedXCoordinate === xCoordinate) {
-            throw('invalid ship position');
-          }
-        });
-      });
-    });
-
-    // throw error if coordinates are repeated
-    if (hasDuplicateCoordinates(coordinates)) {
-      throw('invalid ship position');
-    }
-
-    // throw error if coordinates are not in a straight line
-    if (!isInLine(coordinates)) {
-      throw('invalid ship position');
-    }
-
-    // throw error if length of coordinates array doesnt match the last entry in the remainingPlacements array
-    if (coordinates.length !== getNextPlacement()) {
+    if (!isValidPlacement(coordinates)) {
       throw('invalid ship position');
     }
 
@@ -354,11 +316,59 @@ const GameBoard = function(ShipFactory) {
     return true;
   }
 
+  function isValidPlacement(coordinates) {
+    let result = true;;
+
+    // return false if any coordinates don't exist on the board
+    coordinates.forEach((coordinate) => {
+      let yCoordinate = coordinate[0];
+      let xCoordinate = coordinate[1];
+
+      if (yCoordinate > gridHeight - 1 || yCoordinate < 0 || xCoordinate > gridLength - 1) {
+        result = false;
+      }
+    });
+
+    // return false if any coordinates overlap with an existing ship
+    coordinates.forEach((coordinate) => {
+      let yCoordinate = coordinate[0];
+      let xCoordinate = coordinate[1];
+
+      ships.forEach((shipEntry) => {
+        shipEntry.coordinates.forEach((occupiedCoordinate) => {
+          let occupiedYCoordinate = occupiedCoordinate[0];
+          let occupiedXCoordinate = occupiedCoordinate[1];
+
+          if (occupiedYCoordinate === yCoordinate && occupiedXCoordinate === xCoordinate) {
+            result = false;
+          }
+        });
+      });
+    });
+
+    // return false if coordinates are repeated
+    if (hasDuplicateCoordinates(coordinates)) {
+      result = false;
+    }
+
+    // return false if coordinates are not in a straight line
+    if (!isInLine(coordinates)) {
+      result = false;
+    }
+
+    // return false if length of coordinates array doesnt match the last entry in the remainingPlacements array
+    if (coordinates.length !== getNextPlacement()) {
+      result = false;
+    }
+
+    return result;
+  }
+
   function getNextPlacement() {
     return remainingPlacements[remainingPlacements.length - 1];
   }
 
-  return { getShips, getMisses, getAttacks, getHits, getSize, getRemainingShips, placeShip, receiveAttack, allSunk, print, clear, areAllShipsPlaced, getNextPlacement }
+  return { getShips, getMisses, getAttacks, getHits, getSize, getRemainingShips, placeShip, receiveAttack, allSunk, print, clear, areAllShipsPlaced, getNextPlacement, isValidPlacement }
 }
 
 export default GameBoard;

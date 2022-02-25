@@ -38,34 +38,34 @@ describe('GameBoard instantiation', () => {
 
 describe('gameboard.placeShip()', () => {
 
-  test('raises an error when some or all ship coordinates do not exist on the board', () => {
+  test('throws an error when some or all ship coordinates do not exist on the board', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    expect(() => board.placeShip([[-1, 0], [0, 0], [1, 0], [2, 0], [3, 0]])).toThrow('invalid ship position');
+    expect(() => { board.placeShip([[-1, 0], [0, 0], [1, 0], [2, 0], [3, 0]]) }).toThrow('invalid ship position');
   });
 
-  test('raises an error when some or all ship coordinates overlap with an existing ship', () => {
+  test('throws an error when some or all ship coordinates overlap with an existing ship', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
     board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
 
-    expect(() => board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0]])).toThrow('invalid ship position');
+    expect(() => { board.placeShip([[0, 0], [0, 1], [0, 2], [0, 3]]) }).toThrow('invalid ship position');
   });
 
-  test('raises an error if coordinates are repeated', () => {
+  test('throws an error if coordinates are repeated', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    expect(() => board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [3, 0]])).toThrow('invalid ship position');
+    expect(() => { board.placeShip([[0, 0], [0, 0], [1, 0], [2, 0], [3, 0]]) }).toThrow('invalid ship position');
   });
 
-  test('raises an error if coordinates are not in a straight line', () => {
+  test('throws an error if coordinates are not in a straight line', () => {
     const shipFactory = mockShipFactoryUnSunk;
     const board = GameBoard(shipFactory);
 
-    expect(() => board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [5, 0]])).toThrow('invalid ship position');
+    expect(() => { board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [5, 0]]) }).toThrow('invalid ship position');
   });
 
   test('throws an error if the ship length doesnt match the last entry in the remainingPlacements array', () => {
@@ -74,7 +74,7 @@ describe('gameboard.placeShip()', () => {
 
     // if no ships have been placed yet, the carrier (length of 5) should be placed first
 
-    expect(() => board.placeShip([[0, 0], [1, 0]])).toThrow('invalid ship position');
+    expect(() => { board.placeShip([[-1, 0], [0, 0]]) }).toThrow('invalid ship position');
   });
 
   test('creates a new ship entry when placing a ship in the +y direction', () => {
@@ -409,6 +409,56 @@ describe('gameboard.areAllShipsPlaced()', () => {
     board.placeShip([[0, 4], [1, 4]]);
 
     expect(board.areAllShipsPlaced()).toBe(true);
+  });
+
+});
+
+describe('gameboard.isValidPlacement()', () => {
+
+  test('returns true if the supplied coordinates represent a valid placement', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(board.isValidPlacement([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]])).toBe(true);
+  });
+
+  test('returns false when some or all ship coordinates do not exist on the board', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(board.isValidPlacement([[-1, 0], [0, 0], [1, 0], [2, 0], [3, 0]])).toBe(false);
+  });
+
+  test('returns false when some or all ship coordinates overlap with an existing ship', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+
+    expect(board.isValidPlacement([[0, 0], [0, 1], [0, 2], [0, 3]])).toBe(false);
+  });
+
+  test('returns false if coordinates are repeated', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(board.isValidPlacement([[0, 0], [1, 0], [2, 0], [3, 0], [3, 0]])).toBe(false);
+  });
+
+  test('returns false if coordinates are not in a straight line', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(board.isValidPlacement([[0, 0], [1, 0], [2, 0], [3, 0], [5, 0]])).toBe(false);
+  });
+
+  test('returns false if the ship length doesnt match the last entry in the remainingPlacements array', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    // if no ships have been placed yet, the carrier (length of 5) should be placed first
+
+    expect(board.isValidPlacement([[0, 0], [1, 0], [2, 0], [3, 0]])).toBe(false);
   });
 
 });
