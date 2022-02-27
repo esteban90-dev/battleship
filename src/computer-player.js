@@ -16,6 +16,7 @@ const ComputerPlayer = function(gameboard) {
   }
 
   const board = gameboard;
+  const attackHistory = [];
 
   function attack() {
     // returns random coordinate from the board that hasn't been attacked yet
@@ -31,14 +32,17 @@ const ComputerPlayer = function(gameboard) {
         isValid = true;
       }
     }
+
+    // record attack in attack history
+    attackHistory.push(randomCoordinate.slice(0));
+
     return randomCoordinate;
   }
 
   function hasBeenAttacked(coordinate) {
-    const attacks = board.getAttacks();
     let result = false;
 
-    attacks.forEach((attackCoordinate) => {
+    attackHistory.forEach((attackCoordinate) => {
       if (coordinate[0] === attackCoordinate[0] && coordinate[1] === attackCoordinate[1]) {
         result = true;
       }
