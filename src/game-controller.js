@@ -39,6 +39,8 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
       placeComputerShips();
       display.bindComputerGridButtonsForAttack(receiveAttack);
       display.renderHumanAttackPrompt();
+      display.renderHumanShipsRemaining(humanBoard.getRemainingShips());
+      display.renderComputerShipsRemaining(computerBoard.getRemainingShips());
     }
     else {
       display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
@@ -59,6 +61,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
 
     computerBoard.receiveAttack(coordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
+    display.renderComputerShipsRemaining(computerBoard.getRemainingShips());
     // if the computer board ships are sunk, announce the human as the winner,
     // otherwise let the computer guess again
     if (computerBoard.allSunk()) {
@@ -70,6 +73,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
       sleep(1000).then(() => {
         humanBoard.receiveAttack(computerGuess);
         display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+        display.renderHumanShipsRemaining(humanBoard.getRemainingShips());
         // if human board ships are sunk, announce the computer as winner,
         // otherwise prompt the human to attack again
         if (humanBoard.allSunk()) {

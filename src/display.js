@@ -315,7 +315,27 @@ const Display = function() {
     gamePromptContainer.appendChild(p);
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner }
+  function renderHumanShipsRemaining(shipCount) {
+    // clear the status container
+    humanStatus.innerHTML = '';
+
+    // display the number of remaining Ships
+    const p = document.createElement('p');
+    p.innerHTML = `ships remaining: ${shipCount}`;
+    humanStatus.appendChild(p);
+  }
+
+  function renderComputerShipsRemaining(shipCount) {
+    // clear the status container
+    computerStatus.innerHTML = '';
+
+    // display the number of remaining Ships
+    const p = document.createElement('p');
+    p.innerHTML = `ships remaining: ${shipCount}`;
+    computerStatus.appendChild(p);
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner, renderHumanShipsRemaining, renderComputerShipsRemaining }
 }
 
 export default Display;
