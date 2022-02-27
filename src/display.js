@@ -302,7 +302,17 @@ const Display = function() {
     gamePromptContainer.appendChild(p);
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner }
+  function renderComputerWinner() {
+    // clear the game prompt container
+    gamePromptContainer.innerHTML = '';
+
+    // display the human as winner
+    const p = document.createElement('p');
+    p.innerHTML = 'computer is the winner!';
+    gamePromptContainer.appendChild(p);
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner }
 }
 
 export default Display;
