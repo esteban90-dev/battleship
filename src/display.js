@@ -292,7 +292,17 @@ const Display = function() {
     gamePromptContainer.appendChild(p);
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt }
+  function renderHumanWinner() {
+    // clear the game prompt container
+    gamePromptContainer.innerHTML = '';
+
+    // display the human as winner
+    const p = document.createElement('p');
+    p.innerHTML = 'human is the winner!';
+    gamePromptContainer.appendChild(p);
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner }
 }
 
 export default Display;

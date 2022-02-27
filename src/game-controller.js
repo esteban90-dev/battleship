@@ -59,14 +59,29 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
 
     computerBoard.receiveAttack(coordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
-    display.renderComputerAttackPrompt();
-    // add 2 second delay to simulate the computer thinking
-    sleep(2000).then(() => {
-      humanBoard.receiveAttack(computerGuess);
-      display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
-      display.bindComputerGridButtonsForAttack(receiveAttack);
-      display.renderHumanAttackPrompt();
-    });
+    // if the computer board ships are sunk, announce the human as the winner,
+    // otherwise let the computer guess again
+    if (computerBoard.allSunk()) {
+      display.renderHumanWinner();
+    }
+    else {
+      display.renderComputerAttackPrompt();
+      // add 2 second delay to simulate the computer thinking
+      sleep(1000).then(() => {
+        humanBoard.receiveAttack(computerGuess);
+        display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+        // if human board ships are sunk, announce the computer as winner,
+        // otherwise prompt the human to attack again
+        if (humanBoard.allSunk()) {
+          display.renderComputerWinner();
+        }
+        else {
+          display.bindComputerGridButtonsForAttack(receiveAttack);
+          display.renderHumanAttackPrompt();
+        }
+      });
+    }
+    
   }
 
   function testPlacement(coordinates) {
