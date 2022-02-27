@@ -82,12 +82,15 @@ const Display = function() {
   function bindComputerGridButtonsForAttack(handler) {
     const buttons = document.querySelectorAll('.computer-button');
     buttons.forEach((button) => {
-      button.addEventListener('click', (event) => {
-        const id = event.target.getAttribute('id');
-        const coordinate = [parseInt(id.slice(1, 2)), parseInt(id.slice(2, 3))];
-
-        handler(coordinate);
-      });
+      // only add listener if the button hasnt been attacked before
+      if (button.innerHTML === '') {
+        button.addEventListener('click', (event) => {
+          const id = event.target.getAttribute('id');
+          const coordinate = [parseInt(id.slice(1, 2)), parseInt(id.slice(2, 3))];
+  
+          handler(coordinate);
+        });
+      }
     });
   }
 
