@@ -18,25 +18,67 @@ const ComputerPlayer = function(gameboard) {
   const board = gameboard;
   const attackHistory = [];
 
-  function attack() {
-    // returns random coordinate from the board that hasn't been attacked yet
+  function attack(printedHumanBoard, difficulty) {
     const boardLength = board.getSize()[0];
     const boardHeight = board.getSize()[1];
     let isValid = false;
-    let randomCoordinate = [];
+    let attackCoordinate = [];
 
     while (!isValid) {
-      // keep looking for random coordinates until one is found that has not been attacked yet
-      randomCoordinate = [random(0, boardLength), random(0, boardHeight)];
-      if (!hasBeenAttacked(randomCoordinate)) {
+      if (difficulty === 0) {
+        // if easy difficulty, just return a random coordinate
+        attackCoordinate = [random(0, boardLength), random(0, boardHeight)];
+      }
+
+      if (difficulty === 1) {
+        // if hard difficulty, analyze the printed human board and return a coordinate near
+        // a small 'x' - ignore large 'X's because these are already sunken ships
+        // 1. return all coordinates with an 'x'
+        // 2. get their adjacent coordinates
+        // 3. randomly select from these coordinates
+
+        const unSunkenHits = [];
+        const adjacents = [];
+
+        // get all the unsunken ('x') hits
+        printedHumanBoard.forEach((gridRow, rowIndex) => {
+          gridRow.forEach((gridPoint, pointIndex) => {
+            if (gridPoint === 'x') {
+              let coordinate = [rowIndex, pointIndex];
+              unSunkenHits.push(coordinate.slice(0));
+            }
+          });
+        });
+
+        // find all the coordinates adjacent to the 'x's
+        unSunkenHits.forEach((coordinate) => {
+          // one coordinate above
+          adjacents.push([coordinate[0] + 1, coordinate[1]]);
+
+          // one coordinate below
+          adjacents.push([coordinate[0] - 1, coordinate[1]]);
+
+          // one coordinate right
+          adjacents.push([coordinate[0], coordinate[1] + 1]);
+
+          // one coordinate left
+          adjacents.push([coordinate[0], coordinate[1] - 1]);
+        });
+
+        // randomly select one of the adjacents as an attack coordinate
+        attackCoordinate = adjacents[random(0, adjacents.length)];
+      }
+
+      // validate that coordinate hasn't been attacked already and is actually on the board
+      if (!hasBeenAttacked(attackCoordinate) && attackCoordinate[0] >= 0 && attackCoordinate[0] < boardHeight && attackCoordinate[1] >= 0 && attackCoordinate[1] < boardLength) {
         isValid = true;
       }
     }
-
+    
     // record attack in attack history
-    attackHistory.push(randomCoordinate.slice(0));
+    attackHistory.push(attackCoordinate.slice(0));
 
-    return randomCoordinate;
+    return attackCoordinate;
   }
 
   function hasBeenAttacked(coordinate) {
