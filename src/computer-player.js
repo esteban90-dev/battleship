@@ -50,23 +50,29 @@ const ComputerPlayer = function(gameboard) {
           });
         });
 
-        // find all the coordinates adjacent to the 'x's
-        unSunkenHits.forEach((coordinate) => {
-          // one coordinate above
-          adjacents.push([coordinate[0] + 1, coordinate[1]]);
+        if (unSunkenHits.length > 0) {
+          // if there are 'x's, find all the coordinates adjacent to the 'x's
+          unSunkenHits.forEach((coordinate) => {
+            // one coordinate above
+            adjacents.push([coordinate[0] + 1, coordinate[1]]);
 
-          // one coordinate below
-          adjacents.push([coordinate[0] - 1, coordinate[1]]);
+            // one coordinate below
+            adjacents.push([coordinate[0] - 1, coordinate[1]]);
 
-          // one coordinate right
-          adjacents.push([coordinate[0], coordinate[1] + 1]);
+            // one coordinate right
+            adjacents.push([coordinate[0], coordinate[1] + 1]);
 
-          // one coordinate left
-          adjacents.push([coordinate[0], coordinate[1] - 1]);
-        });
+            // one coordinate left
+            adjacents.push([coordinate[0], coordinate[1] - 1]);
+          });
 
-        // randomly select one of the adjacents as an attack coordinate
-        attackCoordinate = adjacents[random(0, adjacents.length)];
+          // randomly select one of the adjacents as an attack coordinate
+          attackCoordinate = adjacents[random(0, adjacents.length)];
+        }
+        else {
+          // if there are no x's, just choose a random board coordinate
+          attackCoordinate = [random(0, boardLength), random(0, boardHeight)];
+        }
       }
 
       // validate that coordinate hasn't been attacked already and is actually on the board
