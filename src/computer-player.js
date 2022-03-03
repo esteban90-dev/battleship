@@ -16,13 +16,23 @@ const ComputerPlayer = function(gameboard) {
   }
 
   const board = gameboard;
-  const attackHistory = [];
 
   function attack(printedHumanBoard, difficulty) {
     const boardLength = board.getSize()[0];
     const boardHeight = board.getSize()[1];
     let isValid = false;
     let attackCoordinate = [];
+    let previousAttacks = [];
+
+    // build array of coordinates that represents which grid points have already been attacked
+    printedHumanBoard.forEach((gridRow, rowIndex) => {
+      gridRow.forEach((gridPoint, pointIndex) => {
+        if (gridPoint !== '') {
+          let coordinate = [rowIndex, pointIndex];
+          previousAttacks.push(coordinate.slice(0));
+        }
+      });
+    });
 
     while (!isValid) {
       if (difficulty === 0) {
@@ -76,21 +86,18 @@ const ComputerPlayer = function(gameboard) {
       }
 
       // validate that coordinate hasn't been attacked already and is actually on the board
-      if (!hasBeenAttacked(attackCoordinate) && attackCoordinate[0] >= 0 && attackCoordinate[0] < boardHeight && attackCoordinate[1] >= 0 && attackCoordinate[1] < boardLength) {
+      if (!hasBeenAttacked(attackCoordinate, previousAttacks) && attackCoordinate[0] >= 0 && attackCoordinate[0] < boardHeight && attackCoordinate[1] >= 0 && attackCoordinate[1] < boardLength) {
         isValid = true;
       }
     }
-    
-    // record attack in attack history
-    attackHistory.push(attackCoordinate.slice(0));
 
     return attackCoordinate;
   }
 
-  function hasBeenAttacked(coordinate) {
+  function hasBeenAttacked(coordinate, previousAttacks) {
     let result = false;
 
-    attackHistory.forEach((attackCoordinate) => {
+    previousAttacks.forEach((attackCoordinate) => {
       if (coordinate[0] === attackCoordinate[0] && coordinate[1] === attackCoordinate[1]) {
         result = true;
       }

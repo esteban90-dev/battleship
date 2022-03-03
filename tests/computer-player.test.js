@@ -58,33 +58,10 @@ describe('ComputerPlayer.getBoard()', () => {
 describe('ComputerPlayer.attack()', () => {
 
   describe('with difficulty set to 0 (easy)', () => {
-
-    test('returns a random board coordinate', () => {
-      const board = mockBoard;
-      const computerPlayer = ComputerPlayer(board);
-      const printedHumanBoard = [
-        ['X', '', '', 'x', '', '', '', '', '', ''],
-        ['X', '', '', '', '', '', '', '', '', ''],
-        ['X', '', '', '', '', '', '', '', '', ''],
-        ['X', '', '', '', '', '', '', '', '', ''],
-        ['X', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', ''],
-      ];
-    
-      expect(computerPlayer.attack(printedHumanBoard, 0)[0]).toBeGreaterThanOrEqual(0);
-      expect(computerPlayer.attack(printedHumanBoard, 0)[0]).toBeLessThan(10);
-      expect(computerPlayer.attack(printedHumanBoard, 0)[1]).toBeGreaterThanOrEqual(0);
-      expect(computerPlayer.attack(printedHumanBoard, 0)[1]).toBeLessThan(10);
-    });
   
     test('returns a random board coordinate that has not already been attacked', () => {
       const board = mockBoard;
       const computerPlayer = ComputerPlayer(board);
-      const attackedCoordinates = [];
       const printedHumanBoard = [
         ['X', '', '', 'x', '', '', '', '', '', ''],
         ['X', '', '', '', '', '', '', '', '', ''],
@@ -97,21 +74,20 @@ describe('ComputerPlayer.attack()', () => {
         ['', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', ''],
       ];
+
+      const invalidAttackCoordinates = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [0, 3]];
   
-      // make 100 attacks and make sure none of them are repeated
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 25; i++) {
         const coordinate = computerPlayer.attack(printedHumanBoard, 0);
-        expect(hasBeenAttacked(coordinate, attackedCoordinates)).toBe(false);
-        attackedCoordinates.push(coordinate.slice(0));
+        expect(hasBeenAttacked(coordinate, invalidAttackCoordinates)).toBe(false);
       }
-      
     });
 
   });
 
   describe('with difficulty set to 1 (hard)', () => {
 
-    test('returns a board coordinate that is adjacent to a previously attacked (unsunk) coordinate that scored a hit on the humans board', () => {
+    test('returns a board coordinate that is adjacent to an unsunk hit on the computer board', () => {
       const board = mockBoard;
       const computerPlayer = ComputerPlayer(board);
       const printedHumanBoard = [
@@ -128,12 +104,36 @@ describe('ComputerPlayer.attack()', () => {
       ];
       const validCoordinates = [[0, 2], [1, 3], [0, 4]];
   
-      const coordinate = computerPlayer.attack(printedHumanBoard, 1);
-  
-      expect(isCoordinateInArray(coordinate, validCoordinates)).toBe(true);
+      for (let i = 0; i < 25; i++) {
+        const coordinate = computerPlayer.attack(printedHumanBoard, 1);
+        expect(isCoordinateInArray(coordinate, validCoordinates)).toBe(true);
+      }
     });
 
-    test('if there are no other unsunk hits on the board, returns a random board coordinate', () => {
+    test('returns a board coordinate that is adjacent and inline with existing unsunk hits on the computer board', () => {
+      const board = mockBoard;
+      const computerPlayer = ComputerPlayer(board);
+      const printedHumanBoard = [
+        ['X', '', '', '', '', '', '', '', '', ''],
+        ['X', '', '', 'x', '', '', '', '', '', ''],
+        ['X', '', '', 'x', '', '', '', '', '', ''],
+        ['X', '', '', '', '', '', '', '', '', ''],
+        ['X', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', ''],
+      ];
+      const validCoordinates = [[0, 3], [3, 3]];
+  
+      for (let i = 0; i < 25; i++) {
+        const coordinate = computerPlayer.attack(printedHumanBoard, 1);
+        expect(isCoordinateInArray(coordinate, validCoordinates)).toBe(true);
+      }
+    });
+
+    test('if there are no other unsunk hits on the board, returns a random board coordinate that hasnt been attacked', () => {
       const board = mockBoard;
       const computerPlayer = ComputerPlayer(board);
       const printedHumanBoard = [
@@ -151,10 +151,12 @@ describe('ComputerPlayer.attack()', () => {
 
       const coordinate = computerPlayer.attack(printedHumanBoard, 1);
 
-      expect(coordinate[0]).toBeGreaterThanOrEqual(0);
-      expect(coordinate[0]).toBeLessThan(10);
-      expect(coordinate[1]).toBeGreaterThanOrEqual(0);
-      expect(coordinate[1]).toBeLessThan(10);
+      const invalidAttackCoordinates = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]];
+  
+      for (let i = 0; i < 25; i++) {
+        const coordinate = computerPlayer.attack(printedHumanBoard, 0);
+        expect(hasBeenAttacked(coordinate, invalidAttackCoordinates)).toBe(false);
+      }
     });
 
   });
