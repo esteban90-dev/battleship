@@ -48,11 +48,88 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
   }
 
   function placeComputerShips() {
-    computerBoard.placeShip([[5, 1], [6, 1], [7, 1], [8, 1], [9, 1]]);
-    computerBoard.placeShip([[1, 7], [2, 7], [3, 7], [4, 7]]);
-    computerBoard.placeShip([[0, 3], [1, 3], [2, 3]]);
-    computerBoard.placeShip([[7, 5], [8, 5], [9, 5]]);
-    computerBoard.placeShip([[7, 8], [7, 9]]);
+    // randomly choose between 10 different computer ship placement configurations
+    let random = parseInt(Math.random() * 10);
+
+    if (random === 0) {
+      computerBoard.placeShip([[5, 1], [6, 1], [7, 1], [8, 1], [9, 1]]);
+      computerBoard.placeShip([[1, 7], [2, 7], [3, 7], [4, 7]]);
+      computerBoard.placeShip([[0, 3], [1, 3], [2, 3]]);
+      computerBoard.placeShip([[7, 5], [8, 5], [9, 5]]);
+      computerBoard.placeShip([[7, 8], [7, 9]]);
+    }
+
+    if (random === 1) {
+      computerBoard.placeShip([[1, 2], [1, 3], [1, 4], [1, 5], [1, 6]]);
+      computerBoard.placeShip([[8, 6], [8, 7], [8, 8], [8, 9]]);
+      computerBoard.placeShip([[5, 0], [6, 0], [7, 0]]);
+      computerBoard.placeShip([[7, 2], [8, 2], [9, 2]]);
+      computerBoard.placeShip([[0, 9], [1, 9]]);
+    }
+
+    if (random === 2) {
+      computerBoard.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+      computerBoard.placeShip([[6, 9], [7, 9], [8, 9], [9, 9]]);
+      computerBoard.placeShip([[3, 3], [3, 4], [3, 5]]);
+      computerBoard.placeShip([[5, 4], [5, 5], [5, 6]]);
+      computerBoard.placeShip([[7, 2], [7, 3]]);
+    }
+
+    if (random === 3) {
+      computerBoard.placeShip([[3, 4], [3, 5], [3, 6], [3, 7], [3, 8]]);
+      computerBoard.placeShip([[6, 1], [6, 2], [6, 3], [6, 4]]);
+      computerBoard.placeShip([[2, 2], [3, 2], [4, 2]]);
+      computerBoard.placeShip([[5, 6], [6, 6], [7, 6]]);
+      computerBoard.placeShip([[4, 4], [5, 4]]);
+    }
+
+    if (random === 4) {
+      computerBoard.placeShip([[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]]);
+      computerBoard.placeShip([[5, 2], [6, 2], [7, 2], [8, 2]]);
+      computerBoard.placeShip([[1, 3], [2, 3], [3, 3]]);
+      computerBoard.placeShip([[6, 9], [7, 9], [8, 9]]);
+      computerBoard.placeShip([[9, 5], [9, 6]]);
+    }
+
+    if (random === 5) {
+      computerBoard.placeShip([[5, 0], [6, 0], [7, 0], [8, 0], [9, 0]]);
+      computerBoard.placeShip([[1, 9], [2, 9], [3, 9], [4, 9]]);
+      computerBoard.placeShip([[4, 6], [4, 7], [4, 8]]);
+      computerBoard.placeShip([[4, 5], [5, 5], [6, 5]]);
+      computerBoard.placeShip([[7, 5], [8, 5]]);
+    }
+
+    if (random === 6) {
+      computerBoard.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+      computerBoard.placeShip([[9, 6], [9, 7], [9, 8], [9, 9]]);
+      computerBoard.placeShip([[1, 3], [1, 4], [1, 5]]);
+      computerBoard.placeShip([[7, 6], [7, 7], [7, 8]]);
+      computerBoard.placeShip([[4, 7], [4, 8]]);
+    }
+
+    if (random === 7) {
+      computerBoard.placeShip([[5, 3], [5, 4], [5, 5], [5, 6], [5, 7]]);
+      computerBoard.placeShip([[3, 3], [3, 4], [3, 5], [3, 6]]);
+      computerBoard.placeShip([[4, 2], [5, 2], [6, 2]]);
+      computerBoard.placeShip([[7, 3], [7, 4], [7, 5]]);
+      computerBoard.placeShip([[0, 7], [1, 7]]);
+    }
+
+    if (random === 8) {
+      computerBoard.placeShip([[4, 8], [5, 8], [6, 8], [7, 8], [8, 8]]);
+      computerBoard.placeShip([[1, 1], [1, 2], [1, 3], [1, 4]]);
+      computerBoard.placeShip([[0, 4], [0, 5], [0, 6]]);
+      computerBoard.placeShip([[4, 4], [5, 4], [6, 4]]);
+      computerBoard.placeShip([[5, 1], [6, 1]]);
+    }
+
+    if (random === 9) {
+      computerBoard.placeShip([[0, 1], [1, 1], [2, 1], [3, 1], [4, 1]]);
+      computerBoard.placeShip([[5, 2], [6, 2], [7, 2], [8, 2]]);
+      computerBoard.placeShip([[2, 3], [3, 3], [4, 3]]);
+      computerBoard.placeShip([[5, 4], [6, 4], [7, 4]]);
+      computerBoard.placeShip([[3, 5], [4, 5]]);
+    }
   }
 
   function receiveAttack(coordinates) {
@@ -85,7 +162,6 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
         }
       });
     }
-    
   }
 
   function testPlacement(coordinates) {
