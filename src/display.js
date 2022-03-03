@@ -7,7 +7,10 @@ const Display = function() {
   const horizontalButton = document.querySelector('#horizontal');
   const pShipsRemaining = document.querySelector('#shipsRemaining');
   const gamePromptContainer = document.querySelector('#gamePrompt');
+  const easyButton = document.querySelector('#easy');
+  const hardButton = document.querySelector('#hard');
   let nextPlacementSize;
+  let difficulty = activeDifficulty();
   let orientation = activeOrientation();
 
   verticalButton.addEventListener('click', () => {
@@ -18,6 +21,14 @@ const Display = function() {
     orientation = horizontalButton.getAttribute('id');
   });
 
+  easyButton.addEventListener('click', () => {
+    difficulty = 0;
+  });
+
+  hardButton.addEventListener('click', () => {
+    difficulty = 1;
+  });
+
   function activeOrientation() {
     let result;
 
@@ -26,6 +37,19 @@ const Display = function() {
     }
     else {
       result = horizontalButton.getAttribute('id');
+    }
+    
+    return result;
+  }
+
+  function activeDifficulty() {
+    let result;
+
+    if (easyButton.checked) {
+      result = 0;
+    }
+    else {
+      result = 1;
     }
     
     return result;
@@ -335,7 +359,11 @@ const Display = function() {
     computerStatus.appendChild(p);
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner, renderHumanShipsRemaining, renderComputerShipsRemaining }
+  function getDifficulty() {
+    return difficulty;
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner, renderHumanShipsRemaining, renderComputerShipsRemaining, getDifficulty }
 }
 
 export default Display;

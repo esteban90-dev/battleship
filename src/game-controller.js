@@ -56,7 +56,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
   }
 
   function receiveAttack(coordinates) {
-    const computerGuess = computerPlayer.attack(); 
+    const computerGuess = computerPlayer.attack(humanBoard.print(), display.getDifficulty());
     const humanShipCoordinates = humanBoard.getShips().map((shipEntry) => shipEntry.coordinates);
 
     computerBoard.receiveAttack(coordinates);
