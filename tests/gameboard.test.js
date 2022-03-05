@@ -307,6 +307,17 @@ describe('gameboard.clear()', () => {
     expect(board.getAttacks()).toEqual([]);
   });
 
+  test('it clears the remainingPlacements array', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+    board.receiveAttack([0, 0]);
+    board.clear();
+
+    expect(board.getNextPlacement()).toEqual(5);
+  });
+
 });
 
 describe('gameboard.getRemainingShips()', () => {

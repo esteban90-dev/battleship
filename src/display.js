@@ -3,57 +3,10 @@ const Display = function() {
   const computerBoard = document.querySelector('#computerBoard');
   const humanStatus = document.querySelector('#humanStatus');
   const computerStatus = document.querySelector('#computerStatus');
-  const verticalButton = document.querySelector('#vertical');
-  const horizontalButton = document.querySelector('#horizontal');
-  const pShipsRemaining = document.querySelector('#shipsRemaining');
   const gamePromptContainer = document.querySelector('#gamePrompt');
-  const easyButton = document.querySelector('#easy');
-  const hardButton = document.querySelector('#hard');
+  const resetButton = document.querySelector('#reset');
   let nextPlacementSize;
-  let difficulty = activeDifficulty();
-  let orientation = activeOrientation();
-
-  verticalButton.addEventListener('click', () => {
-    orientation = verticalButton.getAttribute('id');
-  });
-
-  horizontalButton.addEventListener('click', () => {
-    orientation = horizontalButton.getAttribute('id');
-  });
-
-  easyButton.addEventListener('click', () => {
-    difficulty = 0;
-  });
-
-  hardButton.addEventListener('click', () => {
-    difficulty = 1;
-  });
-
-  function activeOrientation() {
-    let result;
-
-    if (verticalButton.checked) {
-      result = verticalButton.getAttribute('id');
-    }
-    else {
-      result = horizontalButton.getAttribute('id');
-    }
-    
-    return result;
-  }
-
-  function activeDifficulty() {
-    let result;
-
-    if (easyButton.checked) {
-      result = 0;
-    }
-    else {
-      result = 1;
-    }
-    
-    return result;
-  }
+  let difficulty;
 
   function bindHumanGridButtonsForPlacement(hoverHandler, clickHandler) {
     const humanGridButtons = document.querySelectorAll('.human-button');
@@ -179,6 +132,8 @@ const Display = function() {
   }
 
   function addRemainingCoordinates(coordinate) {
+    const verticalButton = document.querySelector('#vertical');
+    const horizontalButton = document.querySelector('#horizontal');
     let yCoords = [];
     let xCoords = [];
     let newCoords = [];
@@ -189,7 +144,7 @@ const Display = function() {
     xCoords.push(coordinate[1]);
 
     // if direction is vertical
-    if (orientation === verticalButton.getAttribute('id')) {
+    if (verticalButton.checked) {
       // push nextPlacementSize more increasing y coordinates into the yCoords array
       for (let i = 0; i < nextPlacementSize - 1; i++) {
         let lastEntry = yCoords.slice(-1)[0];
@@ -203,7 +158,7 @@ const Display = function() {
     }
 
     // if direction is horizontal
-    if (orientation === horizontalButton.getAttribute('id')) {
+    if (horizontalButton.checked) {
       // push nextPlacementSize more same y coordinates into the yCoords array
       for (let i = 0; i < nextPlacementSize - 1; i++) {
         yCoords.push(yCoords.slice(-1)[0]);
@@ -296,6 +251,7 @@ const Display = function() {
   }
 
   function renderRemainingPlacements() {
+    const pShipsRemaining = document.querySelector('#shipsRemaining');
     pShipsRemaining.innerHTML = `Remaining ships to be placed: ${nextPlacementSize}`;
   }
 
@@ -363,7 +319,98 @@ const Display = function() {
     return difficulty;
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner, renderHumanShipsRemaining, renderComputerShipsRemaining, getDifficulty }
+  function bindResetButton(handler) {
+    resetButton.addEventListener('click', () => {
+      let result = window.confirm('are you sure?');
+      if (result) {
+        handler();
+      }
+    });
+  }
+
+  function renderGameSetup() {
+    gamePromptContainer.innerHTML = '';
+
+    const difficultyP = document.createElement('p');
+    difficultyP.innerHTML = 'Computer Difficulty';
+    gamePromptContainer.appendChild(difficultyP);
+
+    const easyLabel = document.createElement('label');
+    easyLabel.setAttribute('for', 'easy');
+    easyLabel.innerHTML = 'easy';
+    gamePromptContainer.appendChild(easyLabel);
+
+    const easyRadio = document.createElement('input');
+    easyRadio.setAttribute('type', 'radio');
+    easyRadio.setAttribute('id', 'easy');
+    easyRadio.setAttribute('name', 'difficulty');
+    easyRadio.setAttribute('value', 'easy');
+    easyRadio.setAttribute('checked', true);
+    gamePromptContainer.appendChild(easyRadio);
+
+    easyRadio.addEventListener('click', () => {
+      difficulty = 0;;
+    })
+
+    const hardLabel = document.createElement('label');
+    hardLabel.setAttribute('for', 'hard');
+    hardLabel.innerHTML = 'hard';
+    gamePromptContainer.appendChild(hardLabel);
+
+    const hardRadio = document.createElement('input');
+    hardRadio.setAttribute('type', 'radio');
+    hardRadio.setAttribute('id', 'hard');
+    hardRadio.setAttribute('name', 'difficulty');
+    hardRadio.setAttribute('value', 'hard');
+    gamePromptContainer.appendChild(hardRadio);
+
+    hardRadio.addEventListener('click', () => {
+      difficulty = 1;
+    });
+
+    const placeP = document.createElement('p');
+    placeP.innerHTML = 'Place your ships on the board';
+    gamePromptContainer.appendChild(placeP);
+
+    const verticalLabel = document.createElement('label');
+    verticalLabel.setAttribute('for', 'vertical');
+    verticalLabel.innerHTML = 'vertical';
+    gamePromptContainer.appendChild(verticalLabel);
+
+    const verticalRadio = document.createElement('input');
+    verticalRadio.setAttribute('type', 'radio');
+    verticalRadio.setAttribute('value', 'vertical');
+    verticalRadio.setAttribute('id', 'vertical');
+    verticalRadio.setAttribute('name', 'orientation');
+    verticalRadio.setAttribute('checked', true);
+    gamePromptContainer.appendChild(verticalRadio);
+
+    const horizontalLabel = document.createElement('label');
+    horizontalLabel.setAttribute('for', 'horizontal');
+    horizontalLabel.innerHTML = 'horizontal';
+    gamePromptContainer.appendChild(horizontalLabel);
+
+    const horizontalRadio = document.createElement('input');
+    horizontalRadio.setAttribute('type', 'radio');
+    horizontalRadio.setAttribute('value', 'horizontal');
+    horizontalRadio.setAttribute('id', 'horizontal');
+    horizontalRadio.setAttribute('name', 'orientation');
+    gamePromptContainer.appendChild(horizontalRadio);
+
+    const shipsRemainingP = document.createElement('p');
+    shipsRemainingP.setAttribute('id', 'shipsRemaining');
+    shipsRemainingP.innerHTML = 'ships remaining';
+    gamePromptContainer.appendChild(shipsRemainingP);
+
+    // set the difficulty
+    if (easyRadio.checked) {
+      difficulty = 0;
+    } else {
+      difficulty = 1;
+    }
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner, renderHumanShipsRemaining, renderComputerShipsRemaining, getDifficulty, bindResetButton, renderGameSetup }
 }
 
 export default Display;

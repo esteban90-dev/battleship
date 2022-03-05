@@ -19,9 +19,14 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
   const computerPlayer = ComputerPlayer;
   const humanBoard = HumanBoard;
   const computerBoard = computerPlayer.getBoard();
+  
+  display.bindResetButton(init);
 
   function init() {
+    humanBoard.clear();
+    computerBoard.clear();
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
+    display.renderGameSetup();
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
     display.setNextPlacementSize(humanBoard.getNextPlacement());
