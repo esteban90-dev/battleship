@@ -79,7 +79,7 @@ describe('ComputerPlayer.attack()', () => {
   
       for (let i = 0; i < 25; i++) {
         const coordinate = computerPlayer.attack(printedHumanBoard, 0);
-        expect(hasBeenAttacked(coordinate, invalidAttackCoordinates)).toBe(false);
+        expect(isCoordinateInArray(coordinate, invalidAttackCoordinates)).toBe(false);
       }
     });
 
@@ -155,25 +155,13 @@ describe('ComputerPlayer.attack()', () => {
   
       for (let i = 0; i < 25; i++) {
         const coordinate = computerPlayer.attack(printedHumanBoard, 0);
-        expect(hasBeenAttacked(coordinate, invalidAttackCoordinates)).toBe(false);
+        expect(isCoordinateInArray(coordinate, invalidAttackCoordinates)).toBe(false);
       }
     });
 
   });
 
 });
-
-function hasBeenAttacked(coordinate, attackHistory) {
-  let result = false;
-
-  attackHistory.forEach((attackedCoordinate) => {
-    if (attackedCoordinate[0] === coordinate[0] && attackedCoordinate[1] === coordinate[1]) {
-      result = true;
-    }
-  });
-
-  return result;
-}
 
 function isCoordinateInArray(coordinate, array) {
   let result = false;
