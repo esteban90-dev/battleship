@@ -10,19 +10,8 @@
   <body>
     <header>
       <h1>Battleship</h1>
-      <div id="gamePrompt">
-        <p>Computer Difficulty</p>
-        <label for ="easy">easy</label>
-        <input type="radio" id="easy" name="difficulty" value="easy" checked>
-        <label for="hard">hard</label>
-        <input type="radio" id="hard" value="hard" name="difficulty">
-        <p>Place your ships on the board</p>
-        <label for="vertical">vertical</label>
-        <input type="radio" value="vertical" id="vertical" name="orientation" checked>
-        <label for="horizontal">horizontal</label>
-        <input type="radio" value="horizontal" id="horizontal" name="orientation">
-        <p id="shipsRemaining"></p>
-      </div>
+      <div id="gamePrompt"></div>
+      <input type="button" value="reset" id="reset">
     </header>
     <main>
       <div class="board-container">
