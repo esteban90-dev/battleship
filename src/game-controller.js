@@ -26,12 +26,13 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     humanBoard.clear();
     computerBoard.clear();
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
-    display.renderGameSetup();
+    display.displayPlacementPrompt();
+    display.displayGameSetup();
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
     display.setNextPlacementSize(humanBoard.getNextPlacement());
     display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
-    display.renderRemainingPlacements();
+    display.displayRemainingPlacements();
   }
 
   function receivePlacement(coordinates) {
@@ -39,13 +40,14 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.setNextPlacementSize(humanBoard.getNextPlacement());
-    display.renderRemainingPlacements();
+    display.displayRemainingPlacements();
     if (humanBoard.areAllShipsPlaced()) {
       placeComputerShips();
       display.bindComputerGridButtonsForAttack(receiveAttack);
-      display.renderHumanAttackPrompt();
-      display.renderHumanShipsRemaining(humanBoard.getRemainingShips());
-      display.renderComputerShipsRemaining(computerBoard.getRemainingShips());
+      display.hideGameSetup();
+      display.displayHumanPrompt();
+      display.displayHumanShipsRemaining(humanBoard.getRemainingShips());
+      display.displayComputerShipsRemaining(computerBoard.getRemainingShips());
     }
     else {
       display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
@@ -143,27 +145,27 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
 
     computerBoard.receiveAttack(coordinates);
     display.renderComputerBoard(computerPlayer.getBoard().print());
-    display.renderComputerShipsRemaining(computerBoard.getRemainingShips());
+    display.displayComputerShipsRemaining(computerBoard.getRemainingShips());
     // if the computer board ships are sunk, announce the human as the winner,
     // otherwise let the computer guess again
     if (computerBoard.allSunk()) {
-      display.renderHumanWinner();
+      display.displayHumanWinner();
     }
     else {
-      display.renderComputerAttackPrompt();
+      display.displayComputerPrompt();
       // add 2 second delay to simulate the computer thinking
       sleep(1000).then(() => {
         humanBoard.receiveAttack(computerGuess);
         display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
-        display.renderHumanShipsRemaining(humanBoard.getRemainingShips());
+        display.displayHumanShipsRemaining(humanBoard.getRemainingShips());
         // if human board ships are sunk, announce the computer as winner,
         // otherwise prompt the human to attack again
         if (humanBoard.allSunk()) {
-          display.renderComputerWinner();
+          display.displayComputerWinner();
         }
         else {
           display.bindComputerGridButtonsForAttack(receiveAttack);
-          display.renderHumanAttackPrompt();
+          display.displayHumanPrompt();
         }
       });
     }

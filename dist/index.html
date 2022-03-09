@@ -10,8 +10,34 @@
   <body>
     <header>
       <h1>Battleship</h1>
-      <div id="gamePrompt"></div>
-      <input type="button" value="reset" id="reset">
+      <h3 id="gamePrompt"></h3>
+      <div id="gameSetup">
+        <div class="row-around">
+          <div class="col">
+            <p class="underline">Ship Orientation</p>
+            <div class="label-row">
+              <input type="radio" value="vertical" id="vertical" name="orientation" checked="true">
+              <label for="vertical">vertical</label>
+              <input type="radio" value="horizontal" id="horizontal" name="orientation">
+              <label for="horizontal">horizontal</label>
+            </div>
+          </div>
+          <div class="col">
+            <p class="underline">Ships Remaining</p>
+            <p id="shipsRemaining">5</p>
+          </div>
+          <div class="col">
+            <p class="underline">Computer Difficulty</p>
+            <div class="label-row">
+              <input type="radio" id="easy" name="difficulty" value="easy" checked="true">
+              <label for="easy">easy</label>
+              <input type="radio" id="hard" name="difficulty" value="hard">
+              <label for="hard">hard</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </header>
     <main>
       <div class="board-container">
@@ -26,7 +52,11 @@
           <div id="computerBoard"></div>
         </section>
       </div>
-      <div id="winner"></div>
+      <div class="row">
+        <div class="row-right">
+          <input type="button" value="reset" id="reset">
+        </div>
+      </div>
     </main>
     <script src="./scripts/main.js"></script>
   </body>

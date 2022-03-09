@@ -3,10 +3,32 @@ const Display = function() {
   const computerBoard = document.querySelector('#computerBoard');
   const humanStatus = document.querySelector('#humanStatus');
   const computerStatus = document.querySelector('#computerStatus');
-  const gamePromptContainer = document.querySelector('#gamePrompt');
+  const gameSetupContainer = document.querySelector('#gameSetup');
   const resetButton = document.querySelector('#reset');
+  const easyButton = document.querySelector('#easy');
+  const hardButton = document.querySelector('#hard');
   let nextPlacementSize;
   let difficulty;
+
+  if (hardButton.checked) {
+    difficulty = 1;
+  }
+
+  if (easyButton.checked) {
+    difficulty = 0;
+  }
+
+  easyButton.addEventListener('click', () => {
+    if (easyButton.checked) {
+      difficulty = 0;
+    }
+  });
+
+  hardButton.addEventListener('click', () => {
+    if (hardButton.checked) {
+      difficulty = 1;
+    }
+  });
 
   function bindHumanGridButtonsForPlacement(hoverHandler, clickHandler) {
     const humanGridButtons = document.querySelectorAll('.human-button');
@@ -250,52 +272,36 @@ const Display = function() {
     nextPlacementSize = size;
   }
 
-  function renderRemainingPlacements() {
+  function displayRemainingPlacements() {
     const pShipsRemaining = document.querySelector('#shipsRemaining');
-    pShipsRemaining.innerHTML = `Remaining ships to be placed: ${nextPlacementSize}`;
+    pShipsRemaining.innerHTML = `${nextPlacementSize}`;
   }
 
-  function renderHumanAttackPrompt() {
-    // clear the game prompt container
-    gamePromptContainer.innerHTML = '';
-
+  function displayHumanPrompt() {
     // prompt the human to attack the computer
-    const p = document.createElement('p');
-    p.innerHTML = 'click on the computer board to place an attack';
-    gamePromptContainer.appendChild(p);
+    const gamePrompt = document.querySelector('#gamePrompt');
+    gamePrompt.innerHTML = 'click on the computer board to place an attack';
   }
 
-  function renderComputerAttackPrompt() {
-    // clear the game prompt container
-    gamePromptContainer.innerHTML = '';
-
+  function displayComputerPrompt() {
     // display that the computer is guessing
-    const p = document.createElement('p');
-    p.innerHTML = 'computer is thinking...';
-    gamePromptContainer.appendChild(p);
+    const gamePrompt = document.querySelector('#gamePrompt');
+    gamePrompt.innerHTML = 'computer is thinking...';
   }
 
-  function renderHumanWinner() {
-    // clear the game prompt container
-    gamePromptContainer.innerHTML = '';
-
+  function displayHumanWinner() {
     // display the human as winner
-    const p = document.createElement('p');
-    p.innerHTML = 'human is the winner!';
-    gamePromptContainer.appendChild(p);
+    const gamePrompt = document.querySelector('#gamePrompt');
+    gamePrompt.innerHTML = 'human is the winner!';
   }
 
-  function renderComputerWinner() {
-    // clear the game prompt container
-    gamePromptContainer.innerHTML = '';
-
+  function displayComputerWinner() {
     // display the human as winner
-    const p = document.createElement('p');
-    p.innerHTML = 'computer is the winner!';
-    gamePromptContainer.appendChild(p);
+    const gamePrompt = document.querySelector('#gamePrompt');
+    gamePrompt.innerHTML = 'computer is the winner!';
   }
 
-  function renderHumanShipsRemaining(shipCount) {
+  function displayHumanShipsRemaining(shipCount) {
     // clear the status container
     humanStatus.innerHTML = '';
 
@@ -305,7 +311,7 @@ const Display = function() {
     humanStatus.appendChild(p);
   }
 
-  function renderComputerShipsRemaining(shipCount) {
+  function displayComputerShipsRemaining(shipCount) {
     // clear the status container
     computerStatus.innerHTML = '';
 
@@ -328,89 +334,23 @@ const Display = function() {
     });
   }
 
-  function renderGameSetup() {
-    gamePromptContainer.innerHTML = '';
-
-    const difficultyP = document.createElement('p');
-    difficultyP.innerHTML = 'Computer Difficulty';
-    gamePromptContainer.appendChild(difficultyP);
-
-    const easyLabel = document.createElement('label');
-    easyLabel.setAttribute('for', 'easy');
-    easyLabel.innerHTML = 'easy';
-    gamePromptContainer.appendChild(easyLabel);
-
-    const easyRadio = document.createElement('input');
-    easyRadio.setAttribute('type', 'radio');
-    easyRadio.setAttribute('id', 'easy');
-    easyRadio.setAttribute('name', 'difficulty');
-    easyRadio.setAttribute('value', 'easy');
-    easyRadio.setAttribute('checked', true);
-    gamePromptContainer.appendChild(easyRadio);
-
-    easyRadio.addEventListener('click', () => {
-      difficulty = 0;;
-    })
-
-    const hardLabel = document.createElement('label');
-    hardLabel.setAttribute('for', 'hard');
-    hardLabel.innerHTML = 'hard';
-    gamePromptContainer.appendChild(hardLabel);
-
-    const hardRadio = document.createElement('input');
-    hardRadio.setAttribute('type', 'radio');
-    hardRadio.setAttribute('id', 'hard');
-    hardRadio.setAttribute('name', 'difficulty');
-    hardRadio.setAttribute('value', 'hard');
-    gamePromptContainer.appendChild(hardRadio);
-
-    hardRadio.addEventListener('click', () => {
-      difficulty = 1;
-    });
-
-    const placeP = document.createElement('p');
-    placeP.innerHTML = 'Place your ships on the board';
-    gamePromptContainer.appendChild(placeP);
-
-    const verticalLabel = document.createElement('label');
-    verticalLabel.setAttribute('for', 'vertical');
-    verticalLabel.innerHTML = 'vertical';
-    gamePromptContainer.appendChild(verticalLabel);
-
-    const verticalRadio = document.createElement('input');
-    verticalRadio.setAttribute('type', 'radio');
-    verticalRadio.setAttribute('value', 'vertical');
-    verticalRadio.setAttribute('id', 'vertical');
-    verticalRadio.setAttribute('name', 'orientation');
-    verticalRadio.setAttribute('checked', true);
-    gamePromptContainer.appendChild(verticalRadio);
-
-    const horizontalLabel = document.createElement('label');
-    horizontalLabel.setAttribute('for', 'horizontal');
-    horizontalLabel.innerHTML = 'horizontal';
-    gamePromptContainer.appendChild(horizontalLabel);
-
-    const horizontalRadio = document.createElement('input');
-    horizontalRadio.setAttribute('type', 'radio');
-    horizontalRadio.setAttribute('value', 'horizontal');
-    horizontalRadio.setAttribute('id', 'horizontal');
-    horizontalRadio.setAttribute('name', 'orientation');
-    gamePromptContainer.appendChild(horizontalRadio);
-
-    const shipsRemainingP = document.createElement('p');
-    shipsRemainingP.setAttribute('id', 'shipsRemaining');
-    shipsRemainingP.innerHTML = 'ships remaining';
-    gamePromptContainer.appendChild(shipsRemainingP);
-
-    // set the difficulty
-    if (easyRadio.checked) {
-      difficulty = 0;
-    } else {
-      difficulty = 1;
+  function displayGameSetup() {
+    if (gameSetupContainer.classList.contains('display-none')) {
+      gameSetupContainer.classList.toggle('display-none');
     }
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, renderRemainingPlacements, renderHumanAttackPrompt, renderComputerAttackPrompt, renderHumanWinner, renderComputerWinner, renderHumanShipsRemaining, renderComputerShipsRemaining, getDifficulty, bindResetButton, renderGameSetup }
+  function hideGameSetup() {
+    gameSetupContainer.classList.toggle('display-none');
+  }
+
+  function displayPlacementPrompt() {
+    const gamePrompt = document.querySelector('#gamePrompt');
+
+    gamePrompt.innerHTML = 'Place your ships';
+  }
+
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, displayRemainingPlacements, displayHumanPrompt, displayComputerPrompt, displayHumanWinner, displayComputerWinner, displayHumanShipsRemaining, displayComputerShipsRemaining, getDifficulty, bindResetButton, displayGameSetup, hideGameSetup, displayPlacementPrompt }
 }
 
 export default Display;
