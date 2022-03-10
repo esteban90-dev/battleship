@@ -26,7 +26,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _shi
   \*********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nfunction Ship(length) {\n\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ship);\n\n//# sourceURL=webpack:///./src/ship.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst Ship = function(length) {\n  if((!length) || (!Number.isInteger(length)) || (length < 0)) {\n    throw('length argument must be a positive integer value');\n  }\n\n  const damage = Array(length).fill(0);\n\n  function getDamage() {\n    return damage;\n  }\n\n  function hit(location) {\n    damage[location] = 1;\n  }\n\n  function isSunk() {\n    return damage.every((item) => item === 1);\n  }\n\n  return { getDamage, hit, isSunk }\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ship);\n\n//# sourceURL=webpack:///./src/ship.js?");
 
 /***/ })
 
