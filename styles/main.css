@@ -25,13 +25,9 @@ p {
   justify-content: center;
 }
 
-.computer-container {
-  margin-left: 50px;
-}
-
 .human-button {
-  height: 50px;
-  width: 50px;
+  min-height: 40px;
+  min-width: 40px;
   border: 1px solid;
   display: flex;
   justify-content: center;
@@ -39,8 +35,8 @@ p {
 }
 
 .computer-button {
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   border: 1px solid;
   cursor: pointer;
   display: flex;
@@ -54,6 +50,7 @@ p {
 
 .grid-row {
   display: flex;
+  width: 100%;
 }
 
 .ship-present {
@@ -91,7 +88,18 @@ p {
   text-decoration: underline;
 }
 
-.col {
+.col-33 {
+  width: 33%;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.col-100 {
+  width: 100%;
 }
 
 .display-none {
@@ -106,4 +114,26 @@ p {
 
 #gamePrompt {
   color: rgb(250, 85, 85);
+}
+
+.my-20 {
+  margin: 20px 0;
+}
+
+@media screen and (max-width: 600px) {
+  .col-100_sm {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .col-100_md {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 901px) {
+  .col-50_lg {
+    width: 50%;
+  }
 }

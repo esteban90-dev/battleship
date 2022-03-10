@@ -5,6 +5,7 @@
   <head>
     <title>Battleship</title>
     <link rel="stylesheet" href="./styles/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   </head>
 
   <body>
@@ -13,7 +14,7 @@
       <h3 id="gamePrompt"></h3>
       <div id="gameSetup">
         <div class="row-around">
-          <div class="col">
+          <div class="col-100_sm col-33 my-20">
             <p class="underline">Ship Orientation</p>
             <div class="label-row">
               <input type="radio" value="vertical" id="vertical" name="orientation" checked="true">
@@ -22,11 +23,11 @@
               <label for="horizontal">horizontal</label>
             </div>
           </div>
-          <div class="col">
+          <div class="col-100_sm col-33 my-20">
             <p class="underline">Ships Remaining</p>
             <p id="shipsRemaining">5</p>
           </div>
-          <div class="col">
+          <div class="col-100_sm col-33 my-20">
             <p class="underline">Computer Difficulty</p>
             <div class="label-row">
               <input type="radio" id="easy" name="difficulty" value="easy" checked="true">
@@ -40,17 +41,17 @@
       
     </header>
     <main>
-      <div class="board-container">
-        <section class="human-container">
+      <div class="row-around">
+        <div class="col-100_md col-50_lg flex-col">
           <h2>Human Board</h2>
           <div id="humanStatus"></div>
           <div id="humanBoard"></div>
-        </section>
-        <section class="computer-container">
+        </div>
+        <div class="col-100_md col-50_lg flex-col">
           <h2>Computer Board</h2>
           <div id="computerStatus"></div>
           <div id="computerBoard"></div>
-        </section>
+        </div>
       </div>
       <div class="row">
         <div class="row-right">
