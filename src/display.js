@@ -4,7 +4,6 @@ const Display = function() {
   const humanStatus = document.querySelector('#humanStatus');
   const computerStatus = document.querySelector('#computerStatus');
   const gameSetupContainer = document.querySelector('#gameSetup');
-  const resetButton = document.querySelector('#reset');
   const easyButton = document.querySelector('#easy');
   const hardButton = document.querySelector('#hard');
   let nextPlacementSize;
@@ -261,13 +260,6 @@ const Display = function() {
     });
   }
 
-  function renderWinner(winner) {
-    const winnerContainer = document.querySelector('#winner');
-    const winnerMessage = document.createElement('p');
-    winnerMessage.innerHTML = `${winner} is the winner!`;
-    winnerContainer.appendChild(winnerMessage);
-  }
-
   function setNextPlacementSize(size) {
     nextPlacementSize = size;
   }
@@ -292,13 +284,13 @@ const Display = function() {
   function displayHumanWinner() {
     // display the human as winner
     const gamePrompt = document.querySelector('#gamePrompt');
-    gamePrompt.innerHTML = 'human is the winner!';
+    gamePrompt.innerHTML = 'Human is the winner!';
   }
 
   function displayComputerWinner() {
     // display the human as winner
     const gamePrompt = document.querySelector('#gamePrompt');
-    gamePrompt.innerHTML = 'computer is the winner!';
+    gamePrompt.innerHTML = 'Computer is the winner!';
   }
 
   function displayHumanShipsRemaining(shipCount) {
@@ -325,15 +317,6 @@ const Display = function() {
     return difficulty;
   }
 
-  function bindResetButton(handler) {
-    resetButton.addEventListener('click', () => {
-      let result = window.confirm('are you sure?');
-      if (result) {
-        handler();
-      }
-    });
-  }
-
   function displayGameSetup() {
     if (gameSetupContainer.classList.contains('display-none')) {
       gameSetupContainer.classList.toggle('display-none');
@@ -350,7 +333,7 @@ const Display = function() {
     gamePrompt.innerHTML = 'Place your ships';
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, renderWinner, setNextPlacementSize, displayRemainingPlacements, displayHumanPrompt, displayComputerPrompt, displayHumanWinner, displayComputerWinner, displayHumanShipsRemaining, displayComputerShipsRemaining, getDifficulty, bindResetButton, displayGameSetup, hideGameSetup, displayPlacementPrompt }
+  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, setNextPlacementSize, displayRemainingPlacements, displayHumanPrompt, displayComputerPrompt, displayHumanWinner, displayComputerWinner, displayHumanShipsRemaining, displayComputerShipsRemaining, getDifficulty, displayGameSetup, hideGameSetup, displayPlacementPrompt }
 }
 
 export default Display;
