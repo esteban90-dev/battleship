@@ -29,67 +29,54 @@ const Display = function() {
     }
   });
 
-  function bindHumanGridButtonsForPlacement(hoverHandler, clickHandler) {
-    const humanGridButtons = document.querySelectorAll('.human-button');
-    humanGridButtons.forEach((button) => {
-      button.addEventListener('mouseover', () => {
-        // during ship placement, when a human's grid point is hovered over,
-        // we need to figure out the other grid points that would make up an 
-        // entire ship.  For example, when placing a carrier (length of 5), 
-        // if grid point [0, 0] is hovered over, we would expect [1, 0], [2, 0], 
-        // [3, 0], and [4, 0] to be the remaining coordinates making up the placement
-        // in the vertical direction.  When hovered over, these other coordinates should
-        // be highlighted green if they represent a valid placement, or highlighted red
-        // if an invalid placement.
+  function addRemainingCoordinates(coordinate) {
+    const verticalButton = document.querySelector('#vertical');
+    const horizontalButton = document.querySelector('#horizontal');
+    const yCoords = [];
+    const xCoords = [];
+    const newCoords = [];
 
-        const idString = button.getAttribute('id');
-        const coordinate = [parseInt(idString.slice(1, 2)), parseInt(idString.slice(2, 3))];
+    // push the intial coordinates into the arrays
+    yCoords.push(coordinate[0]);
+    xCoords.push(coordinate[1]);
 
-        // get remaining coordinates
-        const coordinates = addRemainingCoordinates(coordinate);
-        
-        // convert coordinates into ids
-        const ids = coordinatesToIds(coordinates);
-        
-        // if coordinates are valid, highlight the buttons green
-        // otherwise highlight them red
-        if (hoverHandler(coordinates)) {
-          highlightGreen(ids);
-        }
-        else {
-          highlightRed(ids);
-        }
-      
-      });
-
-      button.addEventListener('click', () => {
-        const idString = button.getAttribute('id');
-        const coordinate = [parseInt(idString.slice(1, 2)), parseInt(idString.slice(2, 3))];
-
-        // get remaining coordinates
-        const coordinates = addRemainingCoordinates(coordinate);
-
-        // only allow valid ship placements
-        if (hoverHandler(coordinates)) {
-          clickHandler(coordinates);
-        }
-      });
-    });
-  }
-
-  function bindComputerGridButtonsForAttack(handler) {
-    const buttons = document.querySelectorAll('.computer-button');
-    buttons.forEach((button) => {
-      // only add listener if the button hasnt been attacked before (i.e. no icon will be present)
-      if (button.firstChild.classList.length === 0) {
-        button.addEventListener('click', (event) => {
-          const id = event.target.getAttribute('id');
-          const coordinate = [parseInt(id.slice(1, 2)), parseInt(id.slice(2, 3))];
-  
-          handler(coordinate);
-        });
+    // if direction is vertical
+    if (verticalButton.checked) {
+      // push nextPlacementSize more increasing y coordinates into the yCoords array
+      for (let i = 0; i < nextPlacementSize - 1; i += 1) {
+        const lastEntry = yCoords.slice(-1)[0];
+        yCoords.push(lastEntry + 1);
       }
+
+      // push nextPlacementSize more same x coordinates into the xCoords array
+      for (let i = 0; i < nextPlacementSize - 1; i += 1) {
+        xCoords.push(xCoords.slice(-1)[0]);
+      }
+    }
+
+    // if direction is horizontal
+    if (horizontalButton.checked) {
+      // push nextPlacementSize more same y coordinates into the yCoords array
+      for (let i = 0; i < nextPlacementSize - 1; i += 1) {
+        yCoords.push(yCoords.slice(-1)[0]);
+      }
+
+      // push nextPlacementSize more increasing x coordinates into the xCoords array
+      for (let i = 0; i < nextPlacementSize - 1; i += 1) {
+        const lastEntry = xCoords.slice(-1)[0];
+        xCoords.push(lastEntry + 1);
+      }
+    }
+
+    // create the new coordinates array
+    yCoords.forEach((element, index) => {
+      const temp = [];
+      temp.push(element);
+      temp.push(xCoords[index]);
+      newCoords.push(temp);
     });
+
+    return newCoords;
   }
 
   function highlightGreen(ids) {
@@ -108,11 +95,8 @@ const Display = function() {
         if (!button.classList.contains('highlight-green')) {
           button.classList.toggle('highlight-green');
         }
-      }
-      else {
-        if (button.classList.contains('highlight-green')) {
-          button.classList.toggle('highlight-green');
-        }
+      } else if (button.classList.contains('highlight-green')) {
+        button.classList.toggle('highlight-green');
       }
     });
   }
@@ -133,74 +117,20 @@ const Display = function() {
         if (!button.classList.contains('highlight-red')) {
           button.classList.toggle('highlight-red');
         }
-      }
-      else {
-        if (button.classList.contains('highlight-red')) {
-          button.classList.toggle('highlight-red');
-        }
+      } else if (button.classList.contains('highlight-red')) {
+        button.classList.toggle('highlight-red');
       }
     });
   }
 
   function coordinatesToIds(coordinates) {
-    let ids = [];
+    const ids = [];
 
     coordinates.forEach((coordinate) => {
       ids.push(`h${coordinate[0]}${coordinate[1]}`);
     });
 
     return ids;
-  }
-
-  function addRemainingCoordinates(coordinate) {
-    const verticalButton = document.querySelector('#vertical');
-    const horizontalButton = document.querySelector('#horizontal');
-    let yCoords = [];
-    let xCoords = [];
-    let newCoords = [];
-    let direction = 'y';
-
-    // push the intial coordinates into the arrays
-    yCoords.push(coordinate[0]);
-    xCoords.push(coordinate[1]);
-
-    // if direction is vertical
-    if (verticalButton.checked) {
-      // push nextPlacementSize more increasing y coordinates into the yCoords array
-      for (let i = 0; i < nextPlacementSize - 1; i++) {
-        let lastEntry = yCoords.slice(-1)[0];
-        yCoords.push(lastEntry + 1);
-      }
-
-      // push nextPlacementSize more same x coordinates into the xCoords array
-      for (let i = 0; i < nextPlacementSize - 1; i++) {
-        xCoords.push(xCoords.slice(-1)[0]);
-      }
-    }
-
-    // if direction is horizontal
-    if (horizontalButton.checked) {
-      // push nextPlacementSize more same y coordinates into the yCoords array
-      for (let i = 0; i < nextPlacementSize - 1; i++) {
-        yCoords.push(yCoords.slice(-1)[0]);
-      }
-
-      // push nextPlacementSize more increasing x coordinates into the xCoords array
-      for (let i = 0; i < nextPlacementSize - 1; i++) {
-        let lastEntry = xCoords.slice(-1)[0];
-        xCoords.push(lastEntry + 1);
-      }
-    }
-
-    // create the new coordinates array
-    yCoords.forEach((element, index) => {
-      let temp = [];
-      temp.push(element);
-      temp.push(xCoords[index]);
-      newCoords.push(temp);
-    });
-    
-    return newCoords;
   }
 
   function renderStatuses(gameResponse) {
@@ -233,6 +163,67 @@ const Display = function() {
     }
 
     return document.createElement('p');
+  }
+
+  function bindHumanGridButtonsForPlacement(hoverHandler, clickHandler) {
+    const humanGridButtons = document.querySelectorAll('.human-button');
+    humanGridButtons.forEach((button) => {
+      button.addEventListener('mouseover', () => {
+        // during ship placement, when a human's grid point is hovered over,
+        // we need to figure out the other grid points that would make up an 
+        // entire ship.  For example, when placing a carrier (length of 5), 
+        // if grid point [0, 0] is hovered over, we would expect [1, 0], [2, 0], 
+        // [3, 0], and [4, 0] to be the remaining coordinates making up the placement
+        // in the vertical direction.  When hovered over, these other coordinates should
+        // be highlighted green if they represent a valid placement, or highlighted red
+        // if an invalid placement.
+
+        const idString = button.getAttribute('id');
+        const coordinate = [parseInt(idString.slice(1, 2), 10), parseInt(idString.slice(2, 3), 10)];
+
+        // get remaining coordinates
+        const coordinates = addRemainingCoordinates(coordinate);
+
+        // convert coordinates into ids
+        const ids = coordinatesToIds(coordinates);
+
+        // if coordinates are valid, highlight the buttons green
+        // otherwise highlight them red
+        if (hoverHandler(coordinates)) {
+          highlightGreen(ids);
+        } else {
+          highlightRed(ids);
+        }
+      });
+
+      button.addEventListener('click', () => {
+        const idString = button.getAttribute('id');
+        const coordinate = [parseInt(idString.slice(1, 2), 10), parseInt(idString.slice(2, 3), 10)];
+
+        // get remaining coordinates
+        const coordinates = addRemainingCoordinates(coordinate);
+
+        // only allow valid ship placements
+        if (hoverHandler(coordinates)) {
+          clickHandler(coordinates);
+        }
+      });
+    });
+  }
+
+  function bindComputerGridButtonsForAttack(handler) {
+    const buttons = document.querySelectorAll('.computer-button');
+    buttons.forEach((button) => {
+      // only add listener if the button hasnt been attacked before (i.e. no icon will be present)
+      if (button.firstChild.classList.length === 0) {
+        button.addEventListener('click', (event) => {
+          const id = event.target.getAttribute('id');
+          const coordinate = [parseInt(id.slice(1, 2), 10), parseInt(id.slice(2, 3), 10)];
+  
+          handler(coordinate);
+        });
+      }
+    });
   }
 
   function renderHumanBoard(boardArr, shipCoordinates) {
@@ -355,7 +346,25 @@ const Display = function() {
     gamePrompt.innerHTML = 'Place your ships';
   }
 
-  return { bindHumanGridButtonsForPlacement, bindComputerGridButtonsForAttack, renderHumanBoard, renderComputerBoard, renderStatuses, setNextPlacementSize, displayRemainingPlacements, displayHumanPrompt, displayComputerPrompt, displayHumanWinner, displayComputerWinner, displayHumanShipsRemaining, displayComputerShipsRemaining, getDifficulty, displayGameSetup, hideGameSetup, displayPlacementPrompt }
-}
+  return {
+    bindHumanGridButtonsForPlacement,
+    bindComputerGridButtonsForAttack,
+    renderHumanBoard,
+    renderComputerBoard,
+    renderStatuses,
+    setNextPlacementSize,
+    displayRemainingPlacements,
+    displayHumanPrompt,
+    displayComputerPrompt,
+    displayHumanWinner,
+    displayComputerWinner,
+    displayHumanShipsRemaining,
+    displayComputerShipsRemaining,
+    getDifficulty,
+    displayGameSetup,
+    hideGameSetup,
+    displayPlacementPrompt,
+  };
+};
 
 export default Display;

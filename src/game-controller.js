@@ -1,18 +1,18 @@
 const GameController = function(ComputerPlayer, HumanBoard, Display) {
   if (!ComputerPlayer || !HumanBoard || !Display) {
-    throw('computer player, human board, and display objects must be provided');
+    throw new Error('computer player, human board, and display objects must be provided');
   }
 
   if (!ComputerPlayer.getBoard) {
-    throw('computer player must respond to getBoard() method');
+    throw new Error('computer player must respond to getBoard() method');
   }
 
   if (!HumanBoard.receiveAttack) {
-    throw('human board must respond to receiveAttack() method');
+    throw new Error('human board must respond to receiveAttack() method');
   }
 
   if (!Display.renderHumanBoard) {
-    throw('display must respond to renderHumanBoard() method');
+    throw new Error('display must respond to renderHumanBoard() method');
   }
 
   const display = Display;
@@ -20,39 +20,19 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
   const humanBoard = HumanBoard;
   const computerBoard = computerPlayer.getBoard();
 
-  function init() {
-    const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
-    display.displayPlacementPrompt();
-    display.displayGameSetup();
-    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
-    display.renderComputerBoard(computerPlayer.getBoard().print());
-    display.setNextPlacementSize(humanBoard.getNextPlacement());
-    display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
-    display.displayRemainingPlacements();
+  function testPlacement(coordinates) {
+    return humanBoard.isValidPlacement(coordinates);
   }
 
-  function receivePlacement(coordinates) {
-    humanBoard.placeShip(coordinates);
-    const humanShipCoordinates = humanBoard.getShips().map(entry => entry.coordinates);
-    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
-    display.setNextPlacementSize(humanBoard.getNextPlacement());
-    display.displayRemainingPlacements();
-    if (humanBoard.areAllShipsPlaced()) {
-      placeComputerShips();
-      display.bindComputerGridButtonsForAttack(receiveAttack);
-      display.hideGameSetup();
-      display.displayHumanPrompt();
-      display.displayHumanShipsRemaining(humanBoard.getRemainingShips());
-      display.displayComputerShipsRemaining(computerBoard.getRemainingShips());
-    }
-    else {
-      display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
-    }
+  async function sleep(ms) {
+    await new Promise((resolve) => {
+      setTimeout(() => { resolve('complete'); }, ms);
+    });
   }
 
   function placeComputerShips() {
     // randomly choose between 10 different computer ship placement configurations
-    let random = parseInt(Math.random() * 10);
+    const random = parseInt(Math.random() * 10, 10);
 
     if (random === 0) {
       computerBoard.placeShip([[5, 1], [6, 1], [7, 1], [8, 1], [9, 1]]);
@@ -133,7 +113,6 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
       computerBoard.placeShip([[5, 4], [6, 4], [7, 4]]);
       computerBoard.placeShip([[3, 5], [4, 5]]);
     }
-
   }
 
   function receiveAttack(coordinates) {
@@ -159,8 +138,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
         // otherwise prompt the human to attack again
         if (humanBoard.allSunk()) {
           display.displayComputerWinner();
-        }
-        else {
+        } else {
           display.bindComputerGridButtonsForAttack(receiveAttack);
           display.displayHumanPrompt();
         }
@@ -168,17 +146,36 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     }
   }
 
-  function testPlacement(coordinates) {
-    return humanBoard.isValidPlacement(coordinates);
+  function receivePlacement(coordinates) {
+    humanBoard.placeShip(coordinates);
+    const humanShipCoordinates = humanBoard.getShips().map((entry) => entry.coordinates);
+    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+    display.setNextPlacementSize(humanBoard.getNextPlacement());
+    display.displayRemainingPlacements();
+    if (humanBoard.areAllShipsPlaced()) {
+      placeComputerShips();
+      display.bindComputerGridButtonsForAttack(receiveAttack);
+      display.hideGameSetup();
+      display.displayHumanPrompt();
+      display.displayHumanShipsRemaining(humanBoard.getRemainingShips());
+      display.displayComputerShipsRemaining(computerBoard.getRemainingShips());
+    } else {
+      display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
+    }
   }
 
-  async function sleep(ms) {
-    return await new Promise((resolve, reject) => {
-      setTimeout(() => { resolve('complete') }, ms)
-    });
+  function init() {
+    const humanShipCoordinates = humanBoard.getShips().map((entry) => entry.coordinates);
+    display.displayPlacementPrompt();
+    display.displayGameSetup();
+    display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
+    display.renderComputerBoard(computerPlayer.getBoard().print());
+    display.setNextPlacementSize(humanBoard.getNextPlacement());
+    display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
+    display.displayRemainingPlacements();
   }
 
   return { init, receivePlacement };
-}
+};
 
 export default GameController;

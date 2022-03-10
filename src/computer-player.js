@@ -1,34 +1,73 @@
 const ComputerPlayer = function(gameboard) {
   if (!gameboard) {
-    throw('a gameboard object must be supplied as an argument');
+    throw new Error('a gameboard object must be supplied as an argument');
   }
 
   if (!gameboard.receiveAttack) {
-    throw('the gameboard argument must respond to the recieveAttack() method');
+    throw new Error('the gameboard argument must respond to the recieveAttack() method');
   }
 
   if (!gameboard.placeShip) {
-    throw('the gameboard argument must respond to the placeShip() method');
+    throw new Error('the gameboard argument must respond to the placeShip() method');
   }
 
   if (!gameboard.allSunk) {
-    throw('the gameboard argument must respond to the allSunk() method');
+    throw new Error('the gameboard argument must respond to the allSunk() method');
   }
 
   const board = gameboard;
   const boardLength = board.getSize()[0];
   const boardHeight = board.getSize()[1];
-  let previousAttacks = [];
+  const previousAttacks = [];
+
+  function random(startNumber, endNumber) {
+    return parseInt(Math.random() * endNumber, 10) + startNumber;
+  }
+
+  function hasBeenAttacked(coordinate) {
+    let result = false;
+
+    previousAttacks.forEach((attackCoordinate) => {
+      if (coordinate[0] === attackCoordinate[0] && coordinate[1] === attackCoordinate[1]) {
+        result = true;
+      }
+    });
+
+    return result;
+  }
+
+  function isValidCoordinate(coordinate) {
+    let onBoard = false;
+    let notAttacked = false;
+
+    if (!hasBeenAttacked(coordinate)) {
+      notAttacked = true;
+    }
+
+    if (coordinate[0] >= 0
+      && coordinate[0] < boardHeight
+      && coordinate[1] >= 0
+      && coordinate[1] < boardLength) {
+      onBoard = true;
+    }
+
+    return notAttacked && onBoard;
+  }
+
+  function getBoard() {
+    return board;
+  }
 
   function attack(printedHumanBoard, difficulty) {
-    let isValid = false;
+    let isValidEasy = false;
+    let isValidHard = false;
     let attackCoordinate = [];
 
     // build array of coordinates that represents which grid points have already been attacked
     printedHumanBoard.forEach((gridRow, rowIndex) => {
       gridRow.forEach((gridPoint, pointIndex) => {
         if (gridPoint !== '') {
-          let coordinate = [rowIndex, pointIndex];
+          const coordinate = [rowIndex, pointIndex];
           previousAttacks.push(coordinate.slice(0));
         }
       });
@@ -36,10 +75,10 @@ const ComputerPlayer = function(gameboard) {
 
     if (difficulty === 0) {
       // if easy mode, just return a valid random coordinate
-      while (!isValid) {
+      while (!isValidEasy) {
         attackCoordinate = [random(0, boardLength), random(0, boardHeight)];
         if (isValidCoordinate(attackCoordinate)) {
-          isValid = true;
+          isValidEasy = true;
         }
       }
       return attackCoordinate;
@@ -62,8 +101,8 @@ const ComputerPlayer = function(gameboard) {
       printedHumanBoard.forEach((gridRow, rowIndex) => {
         let temp = [];
         gridRow.forEach((gridPoint, pointIndex) => {
-          let current = gridPoint;
-          let next = gridRow[pointIndex + 1];
+          const current = gridPoint;
+          const next = gridRow[pointIndex + 1];
 
           if (current === 'x' && next === 'x') {
             temp.push([rowIndex, pointIndex].slice(0));
@@ -83,12 +122,12 @@ const ComputerPlayer = function(gameboard) {
       });
 
       // 2. analyze board for y-direction lines
-      for (let i = 0; i < boardHeight; i++) {
+      for (let i = 0; i < boardHeight; i += 1) {
         let temp = [];
-        for (let j = 0; j < boardLength; j++) {
-          let current = printedHumanBoard[j][i];
-          let next; 
-      
+        for (let j = 0; j < boardLength; j += 1) {
+          const current = printedHumanBoard[j][i];
+          let next;
+
           if (j !== boardHeight - 1) {
             next = printedHumanBoard[j + 1][i];
           }
@@ -116,22 +155,21 @@ const ComputerPlayer = function(gameboard) {
 
       // 4. build an array that contains the coordinates from both ends of each line
       lines.forEach((line) => {
-        let firstElement = line[0];
-        let lastElement = line[line.length - 1];
+        const firstElement = line[0];
+        const lastElement = line[line.length - 1];
         let direction;
 
         // calculate direction
         if (lastElement[1] - firstElement[1] > 0) {
           direction = 'x';
-        }
-        else {
+        } else {
           direction = 'y';
         }
 
         // if x direction, add an x coordinate on the beginning and end of line
         if (direction === 'x') {
-          let beginning = [];
-          let end = [];
+          const beginning = [];
+          const end = [];
 
           beginning.push(firstElement[0]);
           beginning.push(firstElement[1] - 1);
@@ -144,8 +182,8 @@ const ComputerPlayer = function(gameboard) {
 
         // if y direction, add a y coordinate on the beginning and end of line
         if (direction === 'y') {
-          let beginning = [];
-          let end = [];
+          const beginning = [];
+          const end = [];
 
           beginning.push(firstElement[0] - 1);
           beginning.push(firstElement[1]);
@@ -158,7 +196,7 @@ const ComputerPlayer = function(gameboard) {
       });
 
       // 5. remove any invalid coordinates
-      validLineExtensionCoordinates = lineExtensionCoordinates.filter((coordinate) => isValidCoordinate(coordinate));
+      validLineExtensionCoordinates = lineExtensionCoordinates.filter(coordinate => isValidCoordinate(coordinate));
 
       // 6. return the first value in validLineExtensionCoordinates, if any exist
       if (validLineExtensionCoordinates.length > 0) {
@@ -169,7 +207,7 @@ const ComputerPlayer = function(gameboard) {
       printedHumanBoard.forEach((gridRow, rowIndex) => {
         gridRow.forEach((gridPoint, pointIndex) => {
           if (gridPoint === 'x') {
-            let coordinate = [rowIndex, pointIndex];
+            const coordinate = [rowIndex, pointIndex];
             unSunkenHits.push(coordinate.slice(0));
           }
         });
@@ -199,54 +237,17 @@ const ComputerPlayer = function(gameboard) {
       }
 
       // 8.  if there are no valid adjacent coordinates, just randomly guess (similar to easy mode)
-      let isValid = false;
-
-      while (!isValid) {
+      while (!isValidHard) {
         attackCoordinate = [random(0, boardLength), random(0, boardHeight)];
         if (isValidCoordinate(attackCoordinate)) {
-          isValid = true;
+          isValidHard = true;
         }
       }
       return attackCoordinate;
     }
   }
 
-  function isValidCoordinate(coordinate) {
-    let onBoard = false;
-    let notAttacked = false;
-
-    if (!hasBeenAttacked(coordinate, previousAttacks)) {
-      notAttacked = true;
-    }
-
-    if (coordinate[0] >= 0 && coordinate[0] < boardHeight && coordinate[1] >= 0 && coordinate[1] < boardLength) {
-      onBoard = true;
-    }
-
-    return notAttacked && onBoard;
-  }
-
-  function hasBeenAttacked(coordinate, previousAttacks) {
-    let result = false;
-
-    previousAttacks.forEach((attackCoordinate) => {
-      if (coordinate[0] === attackCoordinate[0] && coordinate[1] === attackCoordinate[1]) {
-        result = true;
-      }
-    });
-
-    return result;
-  }
-
-  function random(startNumber, endNumber) {
-    return parseInt(Math.random() * endNumber) + startNumber;
-  }
-
-  function getBoard() {
-    return board;
-  }
-
-  return { attack, getBoard }
-}
+  return { attack, getBoard };
+};
 
 export default ComputerPlayer;

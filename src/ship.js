@@ -1,6 +1,6 @@
-const Ship = function(length) {
-  if((!length) || (!Number.isInteger(length)) || (length < 0)) {
-    throw('length argument must be a positive integer value');
+const Ship = function (length) {
+  if ((!length) || (!Number.isInteger(length)) || (length < 0)) {
+    throw new Error('length argument must be a positive integer value');
   }
 
   const damage = Array(length).fill(0);
@@ -17,7 +17,7 @@ const Ship = function(length) {
     return damage.every((item) => item === 1);
   }
 
-  return { getDamage, hit, isSunk }
-}
+  return { getDamage, hit, isSunk };
+};
 
 export default Ship;
