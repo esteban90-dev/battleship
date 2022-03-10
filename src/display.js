@@ -80,8 +80,8 @@ const Display = function() {
   function bindComputerGridButtonsForAttack(handler) {
     const buttons = document.querySelectorAll('.computer-button');
     buttons.forEach((button) => {
-      // only add listener if the button hasnt been attacked before
-      if (button.innerHTML === '') {
+      // only add listener if the button hasnt been attacked before (i.e. no icon will be present)
+      if (button.firstChild.classList.length === 0) {
         button.addEventListener('click', (event) => {
           const id = event.target.getAttribute('id');
           const coordinate = [parseInt(id.slice(1, 2)), parseInt(id.slice(2, 3))];
@@ -213,6 +213,28 @@ const Display = function() {
     computerStatus.innerHTML = `Remaining ships: ${gameResponse.computerShipsRemaining}`;
   }
 
+  function getIcon(boardMark) {
+    if (boardMark === 'x') {
+      const hitIcon = document.createElement('i');
+      hitIcon.classList.add('fa-solid', 'fa-bomb');
+      return hitIcon;
+    }
+
+    if (boardMark === 'X') {
+      const sunkIcon = document.createElement('i');
+      sunkIcon.classList.add('fa-solid', 'fa-skull-crossbones');
+      return sunkIcon;
+    }
+
+    if (boardMark === 'o') {
+      const missIcon = document.createElement('i');
+      missIcon.classList.add('fa-solid', 'fa-water');
+      return missIcon;
+    }
+
+    return document.createElement('p');
+  }
+
   function renderHumanBoard(boardArr, shipCoordinates) {
     // clear the board
     humanBoard.innerHTML = '';
@@ -226,7 +248,7 @@ const Display = function() {
         const boardButtonId = `h${rowIndex}${pointIndex}`;
         boardButton.setAttribute('id', boardButtonId);
         boardButton.classList.add('human-button');
-        boardButton.innerHTML = boardArr[rowIndex][pointIndex];
+        boardButton.appendChild(getIcon(boardArr[rowIndex][pointIndex]));
         shipCoordinates.forEach((shipCoordinatesArray) => {
           shipCoordinatesArray.forEach((shipCoordinate) => {
             if (shipCoordinate[0] === rowIndex && shipCoordinate[1] === pointIndex) {
@@ -253,7 +275,7 @@ const Display = function() {
         const boardButtonId = `c${rowIndex}${pointIndex}`;
         boardButton.setAttribute('id', boardButtonId);
         boardButton.classList.add('computer-button');
-        boardButton.innerHTML = boardArr[rowIndex][pointIndex];
+        boardButton.appendChild(getIcon(boardArr[rowIndex][pointIndex]));
         row.appendChild(boardButton);
       });
       computerBoard.appendChild(row);

@@ -133,6 +133,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
       computerBoard.placeShip([[5, 4], [6, 4], [7, 4]]);
       computerBoard.placeShip([[3, 5], [4, 5]]);
     }
+
   }
 
   function receiveAttack(coordinates) {
