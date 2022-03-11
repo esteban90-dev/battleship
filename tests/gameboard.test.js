@@ -473,3 +473,36 @@ describe('gameboard.isValidPlacement()', () => {
   });
 
 });
+
+describe('board.getRemainingPlacements()', () => {
+
+  test('when no ships have been placed, it returns 5', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    expect(board.getRemainingPlacements()).toBe(5);
+  });
+
+  test('when 1 ship has been placed, it returns 4', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+
+    expect(board.getRemainingPlacements()).toBe(4);
+  });
+
+  test('when all ships have been placed, it returns 0', () => {
+    const shipFactory = mockShipFactoryUnSunk;
+    const board = GameBoard(shipFactory);
+
+    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
+    board.placeShip([[0, 1], [1, 1], [2, 1], [3, 1]]);
+    board.placeShip([[0, 2], [1, 2], [2, 2]]);
+    board.placeShip([[0, 3], [1, 3], [2, 3]]);
+    board.placeShip([[0, 4], [1, 4]]);
+
+    expect(board.getRemainingPlacements()).toBe(0);
+  });
+
+});

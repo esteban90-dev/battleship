@@ -354,6 +354,10 @@ const GameBoard = function (ShipFactory) {
     return true;
   }
 
+  function getRemainingPlacements() {
+    return remainingPlacements.length;
+  }
+
   return {
     getShips,
     getMisses,
@@ -369,6 +373,7 @@ const GameBoard = function (ShipFactory) {
     areAllShipsPlaced,
     getNextPlacementLength,
     isValidPlacement,
+    getRemainingPlacements,
   };
 };
 
