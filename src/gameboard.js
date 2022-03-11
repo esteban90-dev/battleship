@@ -328,14 +328,6 @@ const GameBoard = function (ShipFactory) {
     return printedBoard;
   }
 
-  function clear() {
-    ships = [];
-    misses = [];
-    hits = [];
-    attacks = [];
-    remainingPlacements = [2, 3, 3, 4, 5];
-  }
-
   function getRemainingShips() {
     let remainingShips = 0;
     ships.forEach((shipEntry) => {
@@ -361,7 +353,6 @@ const GameBoard = function (ShipFactory) {
     receiveAttack,
     allSunk,
     print,
-    clear,
     getNextPlacementLength,
     isValidPlacement,
     getRemainingPlacements,
