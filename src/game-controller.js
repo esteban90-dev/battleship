@@ -151,7 +151,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     const humanShipCoordinates = humanBoard.getShips().map((entry) => entry.coordinates);
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.setNextPlacementSize(humanBoard.getNextPlacementLength());
-    display.displayRemainingPlacements();
+    display.displayRemainingPlacements(humanBoard.getRemainingPlacements());
     if (humanBoard.getRemainingPlacements() === 0) {
       placeComputerShips();
       display.bindComputerGridButtonsForAttack(receiveAttack);
@@ -172,7 +172,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     display.renderComputerBoard(computerPlayer.getBoard().print());
     display.setNextPlacementSize(humanBoard.getNextPlacementLength());
     display.bindHumanGridButtonsForPlacement(testPlacement, receivePlacement);
-    display.displayRemainingPlacements();
+    display.displayRemainingPlacements(humanBoard.getRemainingPlacements());
   }
 
   return { init, receivePlacement };

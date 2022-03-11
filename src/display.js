@@ -277,9 +277,9 @@ const Display = function() {
     nextPlacementSize = size;
   }
 
-  function displayRemainingPlacements() {
+  function displayRemainingPlacements(remainingPlacements) {
     const pShipsRemaining = document.querySelector('#shipsRemaining');
-    pShipsRemaining.innerHTML = `${nextPlacementSize}`;
+    pShipsRemaining.innerHTML = `${remainingPlacements}`;
   }
 
   function displayHumanPrompt() {
