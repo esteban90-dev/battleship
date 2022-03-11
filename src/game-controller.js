@@ -126,6 +126,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     // otherwise let the computer guess again
     if (computerBoard.allSunk()) {
       display.displayHumanWinner();
+      display.displayReset();
     }
     else {
       display.displayComputerPrompt();
@@ -138,6 +139,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
         // otherwise prompt the human to attack again
         if (humanBoard.allSunk()) {
           display.displayComputerWinner();
+          display.displayReset();
         } else {
           display.bindComputerGridButtonsForAttack(receiveAttack);
           display.displayHumanPrompt();
@@ -166,6 +168,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
 
   function init() {
     const humanShipCoordinates = humanBoard.getShips().map((entry) => entry.coordinates);
+    display.hideReset();
     display.displayPlacementPrompt();
     display.displayGameSetup();
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);

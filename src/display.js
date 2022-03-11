@@ -346,6 +346,18 @@ const Display = function() {
     gamePrompt.innerHTML = 'Place your ships';
   }
 
+  function hideReset() {
+    const reset = document.querySelector('#reset');
+
+    reset.classList.add('display-none');
+  }
+
+  function displayReset() {
+    const reset = document.querySelector('#reset');
+
+    reset.classList.toggle('display-none');
+  }
+
   return {
     bindHumanGridButtonsForPlacement,
     bindComputerGridButtonsForAttack,
@@ -364,6 +376,8 @@ const Display = function() {
     displayGameSetup,
     hideGameSetup,
     displayPlacementPrompt,
+    hideReset,
+    displayReset,
   };
 };
 
