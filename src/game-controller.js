@@ -152,7 +152,7 @@ const GameController = function(ComputerPlayer, HumanBoard, Display) {
     display.renderHumanBoard(humanBoard.print(), humanShipCoordinates);
     display.setNextPlacementSize(humanBoard.getNextPlacementLength());
     display.displayRemainingPlacements();
-    if (humanBoard.areAllShipsPlaced()) {
+    if (humanBoard.getRemainingPlacements() === 0) {
       placeComputerShips();
       display.bindComputerGridButtonsForAttack(receiveAttack);
       display.hideGameSetup();
