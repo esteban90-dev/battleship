@@ -154,7 +154,7 @@ const GameBoard = function (ShipFactory) {
     return false;
   }
 
-  function getNextPlacement() {
+  function getNextPlacementLength() {
     return remainingPlacements[remainingPlacements.length - 1];
   }
 
@@ -200,7 +200,7 @@ const GameBoard = function (ShipFactory) {
 
     // return false if length of coordinates array doesnt match
     // the last entry in the remainingPlacements array
-    if (coordinates.length !== getNextPlacement()) {
+    if (coordinates.length !== getNextPlacementLength()) {
       result = false;
     }
 
@@ -367,7 +367,7 @@ const GameBoard = function (ShipFactory) {
     print,
     clear,
     areAllShipsPlaced,
-    getNextPlacement,
+    getNextPlacementLength,
     isValidPlacement,
   };
 };
