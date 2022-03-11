@@ -400,30 +400,6 @@ describe('gameboard.getNextPlacementLength()', () => {
 
 });
 
-describe('gameboard.areAllShipsPlaced()', () => {
-
-  test('returns false if the remainingPlacements array is not empty', () => {
-    const shipFactory = mockShipFactoryUnSunk;
-    const board = GameBoard(shipFactory);
-
-    expect(board.areAllShipsPlaced()).toBe(false);
-  });
-
-  test('returns true if the remainingPlacements array is not empty', () => {
-    const shipFactory = mockShipFactoryUnSunk;
-    const board = GameBoard(shipFactory);
-
-    board.placeShip([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]);
-    board.placeShip([[0, 1], [1, 1], [2, 1], [3, 1]]);
-    board.placeShip([[0, 2], [1, 2], [2, 2]]);
-    board.placeShip([[0, 3], [1, 3], [2, 3]]);
-    board.placeShip([[0, 4], [1, 4]]);
-
-    expect(board.areAllShipsPlaced()).toBe(true);
-  });
-
-});
-
 describe('gameboard.isValidPlacement()', () => {
 
   test('returns true if the supplied coordinates represent a valid placement', () => {

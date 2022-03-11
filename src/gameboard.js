@@ -346,14 +346,6 @@ const GameBoard = function (ShipFactory) {
     return remainingShips;
   }
 
-  function areAllShipsPlaced() {
-    if (remainingPlacements.length > 0) {
-      return false;
-    }
-
-    return true;
-  }
-
   function getRemainingPlacements() {
     return remainingPlacements.length;
   }
@@ -370,7 +362,6 @@ const GameBoard = function (ShipFactory) {
     allSunk,
     print,
     clear,
-    areAllShipsPlaced,
     getNextPlacementLength,
     isValidPlacement,
     getRemainingPlacements,
